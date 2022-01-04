@@ -3,19 +3,19 @@
 
 {% block content %}
 
-    <body class="hold-transition login-page">
-<div class="login-box">
+    <body class="loginPage">
+<div class="loginBox">
   <div class="login-logo">
-    <a href="{% url 'login' %}"><b>Student Projects Management System</a>
+    <a href="{% url 'index' %}" style="color: white;"><b>CST</b>-SPMS</a>
   </div>
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
-      <p class="login-box-msg">Sign in to Student Projects Management System</p>
+      <strong><p class="login-box-msg">Sign in to CST-SPMS</p><strong>
 
       <form action="{% url 'doLogin' %}" method="POST">
       {% csrf_token %}
-        <div class="input-group mb-3">
+        <div class="input-group mb-4 mt-4">
           <input type="email" class="form-control" placeholder="Email" name="email">
           <div class="input-group-append">
             <div class="input-group-text">
@@ -32,8 +32,8 @@
           </div>
         </div>
 
-          <div class="col-12">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+          <div class="col-13">
+            <button type="submit" class="btn btn-primary btn-block" style="background-color: #1B4254;">Sign In</button>
           </div>
 
           {% comment %} <div class="col-12 text-center">
@@ -66,3 +66,4 @@
 <!-- /.login-box -->
 
 {% endblock %}
+    </body>
