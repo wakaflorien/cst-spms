@@ -42,16 +42,17 @@ class Supervisors(models.Model):
 
 
 
-class Groups(models.Model):
+class StudentGroups(models.Model):
     id = models.AutoField(primary_key=True)
     admin = models.OneToOneField(CustomUser, on_delete = models.CASCADE)
+    supervisor_id = models.ForeignKey(Supervisors, on_delete=models.CASCADE, default=1)
     course_name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    first_name=None
-    last_name=None
-    email=None
-    is_staff=None
+    CustomUser.first_name=None
+    CustomUser.last_name=None
+    CustomUser.email=None
+    CustomUser.is_staff=None
     objects = models.Manager()
 
 
@@ -59,7 +60,7 @@ class Proposals(models.Model):
     id =models.AutoField(primary_key=True)
     proposal_title = models.CharField(max_length=255)
     proposal_pic = models.FileField()
-    group_id = models.ForeignKey(Groups, on_delete=models.CASCADE, default=1) #need to give defauult group
+    studentgroup_id = models.ForeignKey(StudentGroups, on_delete=models.CASCADE, default=1) #need to give defauult group
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
@@ -88,31 +89,20 @@ class Students(models.Model):
     objects = models.Manager()
 
 
-class LeaveReportStudent(models.Model):
+
+
+class FeedBackGroup(models.Model):
     id = models.AutoField(primary_key=True)
-    student_id = models.ForeignKey(Students, on_delete=models.CASCADE)
-    leave_date = models.CharField(max_length=255)
-    leave_message = models.TextField()
-    leave_status = models.IntegerField(default=0)
+    studentgroup_id = models.ForeignKey(StudentGroups, on_delete=models.CASCADE)
+    feedback = models.TextField()
+    feedback_reply = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
 
-
-class LeaveReportStaff(models.Model):
+class FeedBackHOD(models.Model):
     id = models.AutoField(primary_key=True)
-    staff_id = models.ForeignKey(Supervisors, on_delete=models.CASCADE)
-    leave_date = models.CharField(max_length=255)
-    leave_message = models.TextField()
-    leave_status = models.IntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    objects = models.Manager()
-
-
-class FeedBackStudent(models.Model):
-    id = models.AutoField(primary_key=True)
-    student_id = models.ForeignKey(Students, on_delete=models.CASCADE)
+    hod_id = models.ForeignKey(AdminHOD, on_delete=models.CASCADE)
     feedback = models.TextField()
     feedback_reply = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -120,9 +110,9 @@ class FeedBackStudent(models.Model):
     objects = models.Manager()
 
 
-class FeedBackStaffs(models.Model):
+class FeedBackSupervisor(models.Model):
     id = models.AutoField(primary_key=True)
-    staff_id = models.ForeignKey(Supervisors, on_delete=models.CASCADE)
+    supervisor_id = models.ForeignKey(Supervisors, on_delete=models.CASCADE)
     feedback = models.TextField()
     feedback_reply = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -131,33 +121,24 @@ class FeedBackStaffs(models.Model):
 
 
 
-class NotificationStudent(models.Model):
+class NotificationGroup(models.Model):
     id = models.AutoField(primary_key=True)
-    student_id = models.ForeignKey(Students, on_delete=models.CASCADE)
+    studentgroup_id = models.ForeignKey(StudentGroups, on_delete=models.CASCADE)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
 
 
-class NotificationStaffs(models.Model):
+class NotificationSupervisors(models.Model):
     id = models.AutoField(primary_key=True)
-    stafff_id = models.ForeignKey(Supervisors, on_delete=models.CASCADE)
+    supervisor_id = models.ForeignKey(Supervisors, on_delete=models.CASCADE)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
 
 
-class StudentResult(models.Model):
-    id = models.AutoField(primary_key=True)
-    student_id = models.ForeignKey(Students, on_delete=models.CASCADE)
-    subject_id = models.ForeignKey(Projects, on_delete=models.CASCADE)
-    subject_exam_marks = models.FloatField(default=0)
-    subject_assignment_marks = models.FloatField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    objects = models.Manager()
 
 
 #Creating Django Signals

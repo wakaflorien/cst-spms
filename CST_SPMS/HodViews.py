@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 import json
 
-from CST_SPMS.models import CustomUser, Projects, Proposals,  Groups, Students, PromotionYear, FeedBackStudent, FeedBackStaffs, LeaveReportStudent, LeaveReportStaff, Supervisors
+from CST_SPMS.models import CustomUser, Projects, Proposals,  StudentGroups, Students, PromotionYear, Supervisors
 from .forms import AddStudentForm, EditStudentForm
 
 
@@ -16,7 +16,7 @@ def admin_home(request):
     project_count = Projects.objects.all().count()
     Proposal_count = Proposals.objects.all().count()
     supervisor_count = Supervisors.objects.all().count()
-    group_count = Groups.objects.all().count()
+    group_count = StudentGroups.objects.all().count()
 
 
     # Total Subjects and students in Each Course

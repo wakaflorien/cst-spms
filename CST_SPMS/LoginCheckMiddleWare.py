@@ -13,25 +13,25 @@ class LoginCheckMiddleWare(MiddlewareMixin):
         #Check whether the user is logged in or not
         if user.is_authenticated:
             if user.user_type == "1":
-                if modulename == "student_management_app.HodViews":
+                if modulename == "CST_SPMS.HodViews":
                     pass
-                elif modulename == "student_management_app.views" or modulename == "django.views.static":
+                elif modulename == "CST_SPMS.views" or modulename == "django.views.static":
                     pass
                 else:
                     return redirect("admin_home")
             
             elif user.user_type == "2":
-                if modulename == "student_management_app.StaffViews":
+                if modulename == "CST_SPMS.SupervisorViews":
                     pass
-                elif modulename == "student_management_app.views" or modulename == "django.views.static":
+                elif modulename == "CST_SPMS.views" or modulename == "django.views.static":
                     pass
                 else:
-                    return redirect("staff_home")
+                    return redirect("supervisor_home")
             
             elif user.user_type == "3":
-                if modulename == "student_management_app.StudentViews":
+                if modulename == "CST_SPMS.StudentViews":
                     pass
-                elif modulename == "student_management_app.views" or modulename == "django.views.static":
+                elif modulename == "CST_SPMS.views" or modulename == "django.views.static":
                     pass
                 else:
                     return redirect("student_home")
