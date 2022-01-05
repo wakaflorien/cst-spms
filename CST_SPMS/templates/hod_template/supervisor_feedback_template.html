@@ -1,7 +1,7 @@
 {% extends 'hod_template/base_template.html' %}
 
 {% block page_title %}
-    Student Feedback
+    Supervisor Feedback
 {% endblock page_title %}
 
 {% block main_content %}
@@ -14,9 +14,9 @@
             <div class="row">
                 <div class="col-md-12">
                     <!-- general form elements -->
-                    <div class="card card-primary">
-                        <div class="card-header">
-                            <h3 class="card-title">Student Feedback</h3>
+                    <div class="card">
+                        <div style="background-color: #C4C4C4"class="card-header">
+                            <h3 class="card-title">Supervisor Feedback</h3>
                         </div>
                         <!-- /.card-header -->
 
@@ -25,11 +25,10 @@
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Student ID</th>
-                                    <th>Student Name</th>
-                                    <th>Student Session</th>
+                                    <th>supervisor ID</th>
+                                    <th>supervisor Name</th>
                                     <th>Message</th>
-                                    <th>Sended On</th>
+                                    <th>Sent On</th>
                                     <th>Reply</th>
                                 </tr>
                                 </thead>
@@ -38,9 +37,8 @@
                                 <tbody>
                                 <tr>
                                     <td>{{ feedback.id }}</td>
-                                    <td>{{ feedback.student_id.admin.id }}</td>
-                                    <td>{{ feedback.student_id.admin.first_name }} {{ feedback.student_id.admin.last_name }}</td>
-                                    <td>{{ feedback.student_id.session_year_id.session_start_year }} - {{ feedback.student_id.session_year_id.session_end_year }}</td>
+                                    <td>{{ feedback.supervisor_id.admin.id }}</td>
+                                    <td>{{ feedback.supervisor_id.admin.first_name }} {{ feedback.supervisor_id.admin.last_name }}</td> 
                                     <td>{{ feedback.feedback }}</td>
                                     <td>{{ feedback.created_at }}</td>
                                     <td>
@@ -85,7 +83,7 @@
             </div>
             <div class="modal-footer">
                 {% comment %} <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> {% endcomment %}
-                <button type="button" class="btn btn-primary btn-block" id="reply_button">Reply</button>
+                <button style="background-color:#1B4254; color: #C4C4C4; font-weight:bold" type="button" class="btn btn-block" id="reply_button">Reply</button>
             </div>
             </div>
         </div>
@@ -123,7 +121,7 @@
                 // Saving Attendance Data into Database
 
                 $.ajax({
-                    url:'{% url 'student_feedback_message_reply' %}',
+                    url:'{% url 'supervisor_feedback_message_reply' %}',
                     type:'POST',
                     data:{id:id, reply:reply},
                 })

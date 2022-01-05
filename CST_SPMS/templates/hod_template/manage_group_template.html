@@ -1,7 +1,7 @@
 {% extends 'hod_template/base_template.html' %}
 
 {% block page_title %}
-    Manage Session
+    Manage Group
 {% endblock page_title %}
 
 {% block main_content %}
@@ -11,7 +11,7 @@
 <section class="content">
         <div class="container-fluid">
 
-            <a class="btn btn-primary" href="{% url 'add_session' %}" role="button">+ Add Session</a> <br/>&nbsp;
+            <a style="background-color:#1B4254; color: #C4C4C4; font-weight:bold"class="btn" href="{% url 'add_group' %}" role="button">+ Add group</a> <br/>&nbsp;
 
             {% if messages %}
                                 <div class="form-group">
@@ -42,14 +42,14 @@
                     <!-- general form elements -->
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Session Details</h3>
+                            <h3 class="card-title">group Details</h3>
 
                             <div class="card-tools">
                             <div class="input-group input-group-sm" style="width: 150px;">
                                 <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
 
                                 <div class="input-group-append">
-                                <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                                <button style="background-color:#1B4254; color: #C4C4C4; font-weight:bold" type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
                                 </div>
                             </div>
                             </div>
@@ -60,20 +60,22 @@
                             <thead>
                                 <tr>
                                 <th>ID</th>
-                                <th>Session Start Year</th>
-                                <th>Session End Year</th>
+                                <th>group Name</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
                                 <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for session_year in session_years %}
+                                {% for group in groups %}
                                 <tr>
-                                <td>{{ session_year.id }}</td>
-                                <td>{{ session_year.session_start_year }}</td>
-                                <td>{{ session_year.session_end_year }}</td>
+                                <td>{{ group.id }}</td>
+                                <td>{{ group.group_name }}</td>
+                                <td>{{ group.created_at }}</td>
+                                <td>{{ group.updated_at }}</td>
                                 <td>
-                                    <a href="{% url 'edit_session' session_year.id %}" class="btn btn-success">Edit</a> 
-                                    <a href="{% url 'delete_session' session_year.id %}" class="btn btn-danger">Delete</a>
+                                    <a href="{% url 'edit_group' group.id %}" class="btn btn-success">Edit</a> 
+                                    <a href="{% url 'delete_group' group.id %}" class="btn btn-danger">Delete</a>
                                 </td>
                                 </tr>
                                 {% endfor %}
