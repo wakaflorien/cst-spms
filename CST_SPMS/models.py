@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models.deletion import CASCADE
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -29,24 +30,10 @@ class AdminHOD(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
 
-
-class Supervisors(models.Model):
-    id = models.AutoField(primary_key=True)
-    gender = models.CharField(max_length=50)
-    admin = models.OneToOneField(CustomUser, on_delete = models.CASCADE)
-    profile_pic = models.FileField()
-    address = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    objects = models.Manager()
-
-
-
 class StudentGroups(models.Model):
     id = models.AutoField(primary_key=True)
     admin = models.OneToOneField(CustomUser, on_delete = models.CASCADE)
-    supervisor_id = models.ForeignKey(Supervisors, on_delete=models.CASCADE, default=1)
-    course_name = models.CharField(max_length=255)
+    group_name = models.CharField(unique=True, max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     CustomUser.first_name=None
@@ -55,11 +42,27 @@ class StudentGroups(models.Model):
     CustomUser.is_staff=None
     objects = models.Manager()
 
+class Supervisors(models.Model):
+    id = models.AutoField(primary_key=True)
+    gender = models.CharField(max_length=50)
+    admin = models.OneToOneField(CustomUser, on_delete = models.CASCADE)
+    profile_pic = models.FileField()
+    address = models.TextField()
+    group_id = models.ForeignKey(StudentGroups, on_delete=models.CASCADE, default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
+
+
+
+
+
 
 class Proposals(models.Model):
     id =models.AutoField(primary_key=True)
     proposal_title = models.CharField(max_length=255)
     proposal_pic = models.FileField()
+    promotion = models.OneToOneField(PromotionYear, on_delete=CASCADE)
     studentgroup_id = models.ForeignKey(StudentGroups, on_delete=models.CASCADE, default=1) #need to give defauult group
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -69,6 +72,7 @@ class Projects(models.Model):
     id =models.AutoField(primary_key=True)
     projeject_title = models.CharField(max_length=255)
     project_pic = models.FileField()
+    promotion = models.OneToOneField(PromotionYear, on_delete=CASCADE)
     proposal_id = models.ForeignKey(Proposals, on_delete=models.CASCADE, default=1) #need to give defauult proposal
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -83,6 +87,7 @@ class Students(models.Model):
     admin = models.OneToOneField(CustomUser, on_delete = models.CASCADE)
     gender = models.CharField(max_length=50)
     profile_pic = models.FileField()
+    student_group = models.ForeignKey(StudentGroups, on_delete=CASCADE)
     address = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -156,7 +161,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         if instance.user_type == 2:
             Supervisors.objects.create(admin=instance)
         if instance.user_type == 3:
-            Groups.objects.create(admin=instance)
+            StudentGroups.objects.create(admin=instance)
         if instance.user_type == 4:
             Students.objects.create(admin=instance)
     
@@ -168,7 +173,7 @@ def save_user_profile(sender, instance, **kwargs):
     if instance.user_type == 2:
         instance.supervisors.save()
     if instance.user_type == 3:
-        instance.groups.save()
+        instance.studentgroups.save()
     if instance.user_type == 4:
         instance.students.save()
 

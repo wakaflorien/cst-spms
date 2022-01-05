@@ -35,8 +35,8 @@ def doLogin(request):
                 return redirect('admin_home')
                 
             elif user_type == '2':
-                # return HttpResponse("Staff Login")
-                return redirect('staff_home')
+                # return HttpResponse("supervisor Login")
+                return redirect('supervisor_home')
                 
             elif user_type == '3':
                 # return HttpResponse("Student Login")

@@ -12,15 +12,15 @@
         <div class="container-fluid">
 
             <div class="row">
-                <div class="col-md-12">
+                <div style="margin-left:30px"class="col-md-11">
                     <!-- general form elements -->
-                    <div class="card card-primary">
-                    <div class="card-header">
+                    <div class="card ">
+                    <div style="background-color: #C4C4C4"class="card-header">
                         <h3 class="card-title">Add supervisor</h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form role="form" method="POST" action="{% url 'add_staff_save' %}">
+                    <form role="form" method="POST" action="{% url 'add_supervisor_save' %}">
                         {% csrf_token %}
 
                         
@@ -75,6 +75,19 @@
                                 <label>Last Name</label>
                                 <input type="text" class="form-control" name="last_name" placeholder="Last Name">
                             </div>
+                            <div class="form-group">
+                                <label>Profile pic</label>
+                                <input type="file" class="form-control" name="profile_pic" >
+                            </div>
+
+                            <div class="form-group">
+                                <label>Assign Group </label>
+                                <select class="form-control" name="group">
+                                    {% for group in groups %}
+                                        <option value="{{ group.id }}" {% if group.id == group_id.id %} selected {% endif %}>{{ group.group_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
 
                             <div class="form-group">
                                 <label>Address</label>
@@ -88,7 +101,7 @@
                         <!-- /.card-body -->
 
                         <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Add supervisor</button>
+                        <button style="background-color:#1B4254; color: #C4C4C4; font-weight:bold"type="submit" class="btn">Add supervisor</button>
                         </div>
                     </form>
                     </div>

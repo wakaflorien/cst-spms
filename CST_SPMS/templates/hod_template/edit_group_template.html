@@ -1,7 +1,7 @@
 {% extends 'hod_template/base_template.html' %}
 
 {% block page_title %}
-    Edit Session Year
+    Edit Course | #ID : {{ course.id }}
 {% endblock page_title %}
 
 {% block main_content %}
@@ -16,11 +16,11 @@
                     <!-- general form elements -->
                     <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Edit Session Year</h3>
+                        <h3 class="card-title">Edit Course</h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form role="form" method="POST" action="{% url 'edit_session_save' %}">
+                    <form role="form" method="POST" action="{% url 'edit_course_save' %}">
                         {% csrf_token %}
 
                         
@@ -52,21 +52,16 @@
 
                         <div class="card-body">
                             <div class="form-group">
-                                <label>Session Start Year </label>
-                                <input type="date" class="form-control" name="session_start_year" value="{{ session_year.session_start_year|date:'Y-m-d' }}">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Session End Year </label>
-                                <input type="date" class="form-control" name="session_end_year" value="{{ session_year.session_end_year|date:'Y-m-d' }}">
+                                <label>Course Name </label>
+                                <input type="text" class="form-control" name="course" value="{{ group.group_name }}">
+                                <input type="hidden" name="course_id" value="{{ group.id }}" />
                             </div>
 
                         </div>
                         <!-- /.card-body -->
 
                         <div class="card-footer">
-                        <input type="hidden" name="session_id" value="{{ session_year.id }}" />
-                        <button type="submit" class="btn btn-primary">Update Session Year</button>
+                        <button style="background-color:#1B4254; color: #C4C4C4; font-weight:bold"type="submit" class="btn btn-primary">Update Group</button>
                         </div>
                     </form>
                     </div>
