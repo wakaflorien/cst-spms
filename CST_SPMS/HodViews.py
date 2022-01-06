@@ -103,12 +103,12 @@ def add_supervisor_save(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         address = request.POST.get('address')
-        profile_pic = request.POST.get('profile_pic')
+       
 
         try:
             user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=2)
             user.supervisors.address = address
-            user.supervisors.profile_pic = profile_pic
+            
             user.save()
             messages.success(request, "supervisor Added Successfully!")
             return redirect('add_supervisor')
@@ -146,7 +146,7 @@ def edit_supervisor_save(request):
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         address = request.POST.get('address')
-        profile_pic = request.POST.get('profile_pic')
+        # profile_pic = request.POST.get('profile_pic')
 
         try:
             # INSERTING into Customuser Model
@@ -161,7 +161,7 @@ def edit_supervisor_save(request):
             # INSERTING into supervisor Model
             supervisor_model = Supervisors.objects.get(admin=supervisor_id)
             supervisor_model.address = address
-            supervisor_model.profile_pic = profile_pic
+            # supervisor_model.profile_pic = profile_pic
             supervisor_model.save()
 
             messages.success(request, "supervisor Updated Successfully.")
@@ -195,10 +195,23 @@ def add_group_save(request):
         messages.error(request, "Invalid Method!")
         return redirect('add_group')
     else:
-        group = request.POST.get('group')
+        username = request.POST.get('username')
+        first_name = ''
+        last_name = ''
+        
+        email = ''
+        group_name = request.POST.get('group_name')
+        password = request.POST.get('password')
+        
+        
+        
+        
+        
         try:
-            group_model = StudentGroups.objects.get(admin=group)
-            group_model.save()
+            user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=3)
+            user.studentgroups.group_name = group_name
+            user.save()
+            
             messages.success(request, "group Added Successfully!")
             return redirect('add_group')
         except:
@@ -356,23 +369,16 @@ def add_student_save(request):
             # Getting Profile Pic first
             # First Check whether the file is selected or not
             # Upload only if file is selected
-            if len(request.FILES) != 0:
-                profile_pic = request.FILES['profile_pic']
-                fs = FileSystemStorage()
-                filename = fs.save(profile_pic.name, profile_pic)
-                profile_pic_url = fs.url(filename)
-            else:
-                profile_pic_url = None
+           
 
 
             try:
-                user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=3)
+                user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=4)
                 user.students.address = address
-
-                group_obj = StudentGroups.objects.get(id=id)
-                user.students.group_id = group_obj
+                group_obj = StudentGroups.objects.get(id=student_group)
+                user.students.student_group = group_obj
                 user.students.gender = gender
-                user.students.profile_pic = profile_pic_url
+                
                 user.save()
                 messages.success(request, "Student Added Successfully!")
                 return redirect('add_student')

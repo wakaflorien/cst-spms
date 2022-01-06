@@ -25,7 +25,6 @@ class AdminHOD(models.Model):
     id = models.AutoField(primary_key=True)
     gender = models.CharField(max_length=50)
     admin = models.OneToOneField(CustomUser, on_delete = models.CASCADE)
-    profile_pic = models.FileField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
@@ -33,22 +32,18 @@ class AdminHOD(models.Model):
 class StudentGroups(models.Model):
     id = models.AutoField(primary_key=True)
     admin = models.OneToOneField(CustomUser, on_delete = models.CASCADE)
-    group_name = models.CharField(unique=True, max_length=255)
+    group_name = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    CustomUser.first_name=None
-    CustomUser.last_name=None
-    CustomUser.email=None
-    CustomUser.is_staff=None
     objects = models.Manager()
-
+    
 class Supervisors(models.Model):
     id = models.AutoField(primary_key=True)
     gender = models.CharField(max_length=50)
     admin = models.OneToOneField(CustomUser, on_delete = models.CASCADE)
-    profile_pic = models.FileField()
+   
     address = models.TextField()
-    group_id = models.ForeignKey(StudentGroups, on_delete=models.CASCADE, default=1)
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
@@ -61,7 +56,6 @@ class Supervisors(models.Model):
 class Proposals(models.Model):
     id =models.AutoField(primary_key=True)
     proposal_title = models.CharField(max_length=255)
-    proposal_pic = models.FileField()
     promotion = models.OneToOneField(PromotionYear, on_delete=CASCADE)
     studentgroup_id = models.ForeignKey(StudentGroups, on_delete=models.CASCADE, default=1) #need to give defauult group
     created_at = models.DateTimeField(auto_now_add=True)
@@ -86,7 +80,6 @@ class Students(models.Model):
     id = models.AutoField(primary_key=True)
     admin = models.OneToOneField(CustomUser, on_delete = models.CASCADE)
     gender = models.CharField(max_length=50)
-    profile_pic = models.FileField()
     student_group = models.ForeignKey(StudentGroups, on_delete=CASCADE)
     address = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
