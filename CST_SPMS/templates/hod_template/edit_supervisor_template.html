@@ -20,7 +20,7 @@
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form role="form" method="POST" action="{% url 'edit_staff_save' %}">
+                    <form role="form" method="POST" action="{% url 'edit_supervisor_save' %}">
                         {% csrf_token %}
 
                         
@@ -53,33 +53,33 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label>Email address</label>
-                                <input type="email" class="form-control" name="email" value="{{ staff.admin.email }}">
+                                <input type="email" class="form-control" name="email" value="{{ supervisor.admin.email }}">
                             </div>
 
                             <div class="form-group">
                                 <label>Username</label>
-                                <input type="text" class="form-control" name="username" value="{{ staff.admin.username }}">
+                                <input type="text" class="form-control" name="username" value="{{ supervisor.admin.username }}">
                             </div>
 
                             {% comment %} <div class="form-group">
                                 <label>Password</label>
-                                <input type="password" class="form-control" name="password" value="{{ staff.admin.password }}">
+                                <input type="password" class="form-control" name="password" value="{{ supervisor.admin.password }}">
                             </div> {% endcomment %}
 
                             <div class="form-group">
                                 <label>First Name</label>
-                                <input type="text" class="form-control" name="first_name" value="{{ staff.admin.first_name }}">
+                                <input type="text" class="form-control" name="first_name" value="{{ supervisor.admin.first_name }}">
                             </div>
 
                             <div class="form-group">
                                 <label>Last Name</label>
-                                <input type="text" class="form-control" name="last_name" value="{{ staff.admin.last_name }}">
-                                <input type="hidden" name="staff_id" value="{{ staff.admin.id }}" />
+                                <input type="text" class="form-control" name="last_name" value="{{ supervisor.admin.last_name }}">
+                                <input type="hidden" name="supervisor_id" value="{{ supervisor.admin.id }}" />
                             </div>
 
                             <div class="form-group">
                                 <label>Address</label>
-                                <textarea class="form-control" name="address">{{ staff.address }}</textarea>
+                                <textarea class="form-control" name="gender">{{ supervisor.gender }}</textarea>
                             </div>
 
                             

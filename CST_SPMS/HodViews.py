@@ -159,7 +159,7 @@ def edit_supervisor_save(request):
         email = request.POST.get('email')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
-        address = request.POST.get('address')
+        gender = request.POST.get('gender')
         # profile_pic = request.POST.get('profile_pic')
 
         try:
@@ -174,7 +174,7 @@ def edit_supervisor_save(request):
             
             # INSERTING into supervisor Model
             supervisor_model = Supervisors.objects.get(admin=supervisor_id)
-            supervisor_model.address = address
+            supervisor_model.gender = gender
             # supervisor_model.profile_pic = profile_pic
             supervisor_model.save()
 
@@ -266,7 +266,7 @@ def add_group_save(request):
             user.save()
             
             messages.success(request, "group Added Successfully!")
-            return redirect('add_group')
+            return redirect('manage_group')
         except:
             messages.error(request, "Failed to Add group!")
             return redirect('add_group')
@@ -302,7 +302,7 @@ def edit_group_save(request):
             group.save()
 
             messages.success(request, "group Updated Successfully.")
-            return redirect('/edit_group/'+group_id)
+            return redirect('/manage_group/')
 
         except:
             messages.error(request, "Failed to Update group.")
@@ -432,54 +432,36 @@ def export_pdf(request):
 
 
 def add_student(request):
-    form = AddStudentForm()
-    context = {
-        "form": form
-    }
-    return render(request, 'hod_template/add_student_template.html', context)
-
-
-
+    return render(request, 'hod_template/add_student_template.html')
 
 def add_student_save(request):
     if request.method != "POST":
         messages.error(request, "Invalid Method")
         return redirect('add_student')
     else:
-        form = AddStudentForm(request.POST, request.FILES)
 
-        if form.is_valid():
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-            username = form.cleaned_data['username']
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
-            address = form.cleaned_data['address']
-            student_group = form.cleaned_data['student_group']
-           
-            gender = form.cleaned_data['gender']
-
-            # Getting Profile Pic first
-            # First Check whether the file is selected or not
-            # Upload only if file is selected
-           
-
+          
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            username = request.POST.get('username')
+            email = request.POST.get('email')
+            password = request.POST.get('password')
+            address = request.POST.get('address')
+            gender = request.POST.get('gender')
+            
 
             try:
                 user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=4)
-                user.students.address = address
-                group_obj = StudentGroups.objects.get(id=student_group)
-                user.students.student_group = group_obj
-                user.students.gender = gender
                 
+                user.students.address = address
+                user.students.gender = gender
                 user.save()
                 messages.success(request, "Student Added Successfully!")
                 return redirect('add_student')
             except:
                 messages.error(request, "Failed to Add Student!")
                 return redirect('add_student')
-        else:
-            return redirect('add_student')
+            
 
 
 def manage_student(request):
@@ -488,6 +470,7 @@ def manage_student(request):
         "students": students
     }
     return render(request, 'hod_template/manage_student_template.html', context)
+
 
 
 def edit_student(request, student_id):
