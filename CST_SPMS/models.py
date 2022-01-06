@@ -41,9 +41,8 @@ class Supervisors(models.Model):
     id = models.AutoField(primary_key=True)
     gender = models.CharField(max_length=50)
     admin = models.OneToOneField(CustomUser, on_delete = models.CASCADE)
-   
-    address = models.TextField()
-    
+    # address = models.TextField()
+    # group_id = models.ForeignKey(StudentGroups, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()

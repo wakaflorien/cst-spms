@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Output</title>
+    <style>
+        @page{
+            size: "A4";
+            margin: 2.5cm 1.5cm 3.5cm 1.5cm;
+            background-color: #1B4254;
+            color: white;
+
+            @top-center{
+                content: "CST SPMS Supervisors Report";
+            }
+            @bottom-right{
+                content: "Page " counter(page) " of " counter(pages);
+            }
+        }
+        .table{
+            color: white;
+            /* border: 1px solid black; */
+        }
+    </style>
+</head>
+<body>
+    <h2 class="text-primary">Supervisor List</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <td>Id</td>
+                <td>Gender</td>
+                <td>Updated</td>
+                <td>Created</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for supervisor in supervisors %}
+            <tr>
+                <td>{{supervisor.id}}</td>
+                <td>{{supervisor.gender}}</td>
+                <td>{{supervisor.updated_at}}</td>
+                <td>{{supervisor.created_at}}</td>
+            </tr>
+            {% endfor%}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -10,6 +10,13 @@ import json
 from CST_SPMS.models import CustomUser, Projects, Proposals,  StudentGroups, Students, PromotionYear, Supervisors, FeedBackSupervisor
 from .forms import AddStudentForm, EditStudentForm
 
+import json
+import csv
+
+from django.template.loader import render_to_string
+from weasyprint import HTML
+import tempfile
+import datetime
 
 def admin_home(request):
     # all_student_count = Students.objects.all().count()
@@ -89,6 +96,11 @@ def admin_home(request):
 
 
 def add_supervisor(request):
+    # groups = StudentGroups.objects.all()
+
+    # context = {
+    #     "groups": groups
+    # }
     return render(request, "hod_template/add_supervisor_template.html")
 
 
@@ -102,13 +114,15 @@ def add_supervisor_save(request):
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
-        address = request.POST.get('address')
+        # address = request.POST.get('address')
+        gender = request.POST.get('gender')
+        # group_id = request.POST.get('group')
+        # group = StudentGroups.objects.get(id=group_id)
        
 
         try:
             user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=2)
-            user.supervisors.address = address
-            
+            user.supervisors.gender = gender
             user.save()
             messages.success(request, "supervisor Added Successfully!")
             return redirect('add_supervisor')
@@ -183,6 +197,45 @@ def delete_supervisor(request, supervisor_id):
         messages.error(request, "Failed to Delete supervisor.")
         return redirect('manage_supervisor')
 
+def export_csv_sup(request):
+    '''
+        Generating reports Hod Supervisor
+    '''
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=Supervisors' + str(datetime.datetime.now())+'.csv'
+
+    writer = csv.writer(response)
+    writer.writerow(['id','Gender', 'Created At', 'Updated at'])
+
+    supervisors = Supervisors.objects.all()
+    
+    for supervisor in supervisors:
+        writer.writerow([supervisor.id,supervisor.gender, supervisor.created_at, supervisor.updated_at])
+
+    return response
+
+def export_pdf_sup(request):
+    
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; attachment; filename=Groups' + str(datetime.datetime.now())+'.pdf'
+
+
+    response['Content-Transfer-Encoding'] = 'binary'
+
+    supervisors = Supervisors.objects.all()
+
+    html_string = render_to_string('hod_template/pdf_supervisor_template.html', {'supervisors':supervisors})
+    html = HTML(string=html_string)
+
+    result = html.write_pdf()
+
+    with tempfile.NamedTemporaryFile(delete=True) as output:
+        output.write(result)
+        output.flush()
+        output = open(output.name, 'rb')
+        response.write(output.read()) 
+
+    return response
 
 
 
@@ -266,6 +319,46 @@ def delete_group(request, group_id):
         messages.error(request, "Failed to Delete group.")
         return redirect('manage_group')
 
+
+def export_csv(request):
+    '''
+        Generating reports Hod Groups
+    '''
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=Groups' + str(datetime.datetime.now())+'.csv'
+
+    writer = csv.writer(response)
+    writer.writerow(['id','Group Name', 'Created At', 'Updated at'])
+
+    groups = StudentGroups.objects.all()
+    
+    for group in groups:
+        writer.writerow([group.id, group.group_name, group.created_at, group.updated_at])
+
+    return response
+
+def export_pdf(request):
+    
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; attachment; filename=Groups' + str(datetime.datetime.now())+'.pdf'
+
+
+    response['Content-Transfer-Encoding'] = 'binary'
+
+    groups = StudentGroups.objects.all()
+
+    html_string = render_to_string('hod_template/pdf_group_output.html', {'groups':groups})
+    html = HTML(string=html_string)
+
+    result = html.write_pdf()
+
+    with tempfile.NamedTemporaryFile(delete=True) as output:
+        output.write(result)
+        output.flush()
+        output = open(output.name, 'rb')
+        response.write(output.read()) 
+
+    return response
 
 # def manage_session(request):
 #     session_years = SessionYearModel.objects.all()

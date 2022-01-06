@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Output</title>
+    <style>
+        @page{
+            size: "A4";
+            margin: 2.5cm 1.5cm 3.5cm 1.5cm;
+            background-color: #1B4254;
+            color: white;
+
+            @top-center{
+                content: "CST SPMS Group Report";
+            }
+            @bottom-right{
+                content: "Page " counter(page) " of " counter(pages);
+            }
+        }
+        .table{
+            color: white;
+            /* border: 1px solid black; */
+        }
+    </style>
+</head>
+<body>
+    <h2 class="text-primary">Group List</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <td>Id</td>
+                <td>Group name</td>
+                <td>Student</td>
+                <td>Staff</td>
+                <td>Created Date</td>
+                <td>Updated Date</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for group in groups %}
+            <tr>
+                <td>{{group.id}}</td>
+                <td>{{group.group_name}}</td>
+                <td>{{group.student_id.first_name}}br<br/> {{group.student_id.last_name}}</td>
+                <td>{{group.staff_id.first_name}}br<br/> {{group.staff_id.last_name}}</td>
+                <td>{{group.created_at}}</td>
+                <td>{{group.updated_at}}</td>
+            </tr>
+            {% endfor%}
+        </tbody>
+    </table>
+</body>
+</html>

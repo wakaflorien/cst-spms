@@ -11,7 +11,10 @@
 <section class="content">
         <div class="container-fluid">
 
-            <a style="background-color: #1B4254; color: #C4C4C4"class="btn" href="{% url 'add_supervisor' %}" role="button">+ Add supervisor</a> <br/>&nbsp;
+            <a style="background-color: #1B4254; color: #C4C4C4"class="btn" href="{% url 'add_supervisor' %}" role="button">+ Add supervisor</a>&nbsp;
+
+            <a class="btn btn-warning" href="{% url 'export_csv_sup' %}" role="button"style="margin-left:500px;color:white;">+ Export CSV</a>&nbsp;
+            <a class="btn btn-success" href="{% url 'export_pdf_sup' %}" role="button"style="margin-left:300px;color:white;">+ Export Pdf</a> <br/>&nbsp;
 
             {% if messages %}
                                 <div class="form-group">
@@ -65,18 +68,12 @@
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>Username</th>
-                                <th>Email</th>
-                                <th>Address</th>
-                                <th>Last Login</th>
-                                <th>Date Joined</th>
-                                <th>Action</th>
-                                </tr>
                             </thead>
                             <tbody>
                                 {% for supervisor in supervisors %}
                                 <tr>
                                 <td>{{ supervisor.admin.id }}</td>
-                                <td>{{ supervisor.admin.first_name }}</td>
+                                <td>{{ supervisor.admin.gender }}</td>
                                 <td>{{ supervisor.admin.last_name }}</td>
                                 <td>{{ supervisor.admin.username }}</td>
                                 <td>{{ supervisor.admin.email }}</td>
@@ -85,7 +82,7 @@
                                 <td>{{ supervisor.admin.date_joined }}</td>
                                 <td>
                                     <a href="{% url 'edit_supervisor' supervisor.admin.id %}" class="btn btn-success">Edit</a> 
-                                    <a href="{% url 'edit_supervisor' supervisor.admin.id %}" class="btn btn-info">Assign</a> 
+                                    <!-- <a href="{% url 'edit_supervisor' supervisor.admin.id %}" class="btn btn-info">Assign</a>  -->
                                     <a href="{% url 'delete_supervisor' supervisor.admin.id %}" class="btn btn-danger">Delete</a>
                                 </td>
                                 </tr>
