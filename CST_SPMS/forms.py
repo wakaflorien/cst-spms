@@ -30,10 +30,9 @@ class AddStudentForm(forms.Form):
         ('Female','Female')
     )
     
-    group_id = forms.ChoiceField(label="Group", choices=group_list, widget=forms.Select(attrs={"class":"form-control"}))
+    student_group = forms.ChoiceField(label="Group", choices=group_list, widget=forms.Select(attrs={"class":"form-control"}))
     gender = forms.ChoiceField(label="Gender", choices=gender_list, widget=forms.Select(attrs={"class":"form-control"}))
-    profile_pic = forms.FileField(label="Profile Pic", required=False, widget=forms.FileInput(attrs={"class":"form-control"}))
-
+    
 
 
 class EditStudentForm(forms.Form):
