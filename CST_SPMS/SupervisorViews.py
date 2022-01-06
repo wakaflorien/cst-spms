@@ -14,7 +14,7 @@ from .forms import AddStudentForm, EditStudentForm
 def supervisor_home(request):
     
 
-    studentgroups = StudentGroups.objects.filter(supervisor_id=request.user.id)
+    studentgroups = StudentGroups.objects.filter(group_id=request.user.id)
     group_id_list = []
     for studentgroup in studentgroups:
         group_id_list.append(studentgroup.id)
