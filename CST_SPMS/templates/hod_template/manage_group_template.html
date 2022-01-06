@@ -11,7 +11,10 @@
 <section class="content">
         <div class="container-fluid">
 
-            <a style="background-color:#1B4254; color: #C4C4C4; font-weight:bold"class="btn" href="{% url 'add_group' %}" role="button">+ Add group</a> <br/>&nbsp;
+            <a style="background-color:#1B4254; color: #C4C4C4; font-weight:bold"class="btn" href="{% url 'add_group' %}" role="button">+ Add group</a>&nbsp;
+            
+            <a class="btn btn-warning" href="{% url 'export_csv' %}" role="button"style="margin-left:500px;color:white;">+ Export CSV</a>&nbsp;
+            <a class="btn btn-success" href="{% url 'export_pdf' %}" role="button"style="margin-left:300px;color:white;">+ Export Pdf</a> <br/>&nbsp;
 
             {% if messages %}
                                 <div class="form-group">

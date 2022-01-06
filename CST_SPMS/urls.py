@@ -25,6 +25,13 @@ urlpatterns = [
     path('edit_group/<group_id>/', HodViews.edit_group, name="edit_group"),
     path('edit_group_save/', HodViews.edit_group_save, name="edit_group_save"),
     path('delete_group/<group_id>/', HodViews.delete_group, name="delete_group"),
+
+    path('export_csv/', HodViews.export_csv, name="export_csv"),
+    path('export_pdf/', HodViews.export_pdf, name="export_pdf"),
+
+
+    path('export_csv_sup/', HodViews.export_csv_sup, name="export_csv_sup"),
+    path('export_pdf_sup/', HodViews.export_pdf_sup, name="export_pdf_sup"),
     # path('manage_session/', HodViews.manage_session, name="manage_session"),
     # path('add_session/', HodViews.add_session, name="add_session"),
     # path('add_session_save/', HodViews.add_session_save, name="add_session_save"),
