@@ -39,10 +39,13 @@ class StudentGroups(models.Model):
     
 class Supervisors(models.Model):
     id = models.AutoField(primary_key=True)
+    admin = models.ForeignKey(CustomUser, on_delete = models.CASCADE, related_name="supervisor")
+    specialization = models.CharField(max_length=250)
+    degree = models.CharField(max_length=250)
+    address = models.TextField()
     gender = models.CharField(max_length=50)
-    admin = models.OneToOneField(CustomUser, on_delete = models.CASCADE)
-    # address = models.TextField()
-    # group_id = models.ForeignKey(StudentGroups, on_delete=models.CASCADE)
+    group = models.ForeignKey(StudentGroups, on_delete=models.CASCADE, null=True)
+    profile_pic = models.FileField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
@@ -77,9 +80,9 @@ class Projects(models.Model):
 
 class Students(models.Model):
     id = models.AutoField(primary_key=True)
-    admin = models.OneToOneField(CustomUser, on_delete = models.CASCADE)
+    admin = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
     gender = models.CharField(max_length=50)
-    student_group = models.ForeignKey(StudentGroups, on_delete=CASCADE)
+    group = models.ForeignKey(StudentGroups, on_delete=CASCADE, null=True)
     address = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -150,23 +153,23 @@ def create_user_profile(sender, instance, created, **kwargs):
         # Check the user_type and insert the data in respective tables
         if instance.user_type == 1:
             AdminHOD.objects.create(admin=instance)
-        if instance.user_type == 2:
-            Supervisors.objects.create(admin=instance)
+        # if instance.user_type == 2:
+        #     Supervisors.objects.create(admin=instance)
         if instance.user_type == 3:
             StudentGroups.objects.create(admin=instance)
-        if instance.user_type == 4:
-            Students.objects.create(admin=instance)
+        # if instance.user_type == 4:
+        #     Students.objects.create(admin=instance)
     
 
 @receiver(post_save, sender=CustomUser)
 def save_user_profile(sender, instance, **kwargs):
     if instance.user_type == 1:
         instance.adminhod.save()
-    if instance.user_type == 2:
-        instance.supervisors.save()
+    # if instance.user_type == 2:
+    #     instance.supervisors.save()
     if instance.user_type == 3:
         instance.studentgroups.save()
-    if instance.user_type == 4:
-        instance.students.save()
+    # if instance.user_type == 4:
+    #     instance.students.save()
 
 
