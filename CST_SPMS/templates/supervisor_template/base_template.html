@@ -57,7 +57,7 @@
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
           
-          <a href="{% url 'staff_profile' %}" class="dropdown-item">
+          <a href="{% url 'supervisor_profile' %}" class="dropdown-item">
             <i class="fas fa-user-edit mr-2"></i> Update Profile
           </a>
           
@@ -74,7 +74,7 @@
     <!-- /.navbar -->
 
     <!-- Main Sidebar Container -->
-    {% include 'staff_template/sidebar_template.html' with user=user id=id %}
+    {% include 'supervisor_template/sidebar_template.html' with user=user id=id %}
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">

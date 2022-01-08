@@ -96,12 +96,12 @@ def admin_home(request):
 
 
 def add_supervisor(request):
-    # groups = StudentGroups.objects.all()
+    groups = StudentGroups.objects.all()
 
-    # context = {
-    #     "groups": groups
-    # }
-    return render(request, "hod_template/add_supervisor_template.html")
+    context = {
+        "groups": groups
+    }
+    return render(request, "hod_template/add_supervisor_template.html", context)
 
 
 def add_supervisor_save(request):
@@ -114,21 +114,25 @@ def add_supervisor_save(request):
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
-        # address = request.POST.get('address')
+        address = request.POST.get('address')
         gender = request.POST.get('gender')
-        # group_id = request.POST.get('group')
-        # group = StudentGroups.objects.get(id=group_id)
+        degree = request.POST.get('degree')
+        spec = request.POST.get('spec')
+        profile = request.POST.get('profile_pic')
+        group_id = request.POST.get('group')
+        group = StudentGroups.objects.get(id=group_id)
        
-
-        try:
-            user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=2)
-            user.supervisors.gender = gender
-            user.save()
-            messages.success(request, "supervisor Added Successfully!")
-            return redirect('add_supervisor')
-        except:
-            messages.error(request, "Failed to Add supervisor!")
-            return redirect('add_supervisor')
+        # try:
+        user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=2)
+        # admin = user.id
+        supervisor = Supervisors(specialization=spec, degree=degree, address=address, gender=gender, profile_pic=profile, group=group, admin=user)
+        supervisor.save()
+        user.save()
+        messages.success(request, "supervisor Added Successfully!")
+        return redirect('manage_supervisor')
+        # except:
+            # messages.error(request, "Failed to Add supervisor!")
+            # return redirect('add_supervisor')
 
 
 
@@ -160,7 +164,11 @@ def edit_supervisor_save(request):
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         gender = request.POST.get('gender')
-        # profile_pic = request.POST.get('profile_pic')
+        spec = request.POST.get('spec')
+        degree = request.POST.get('degree')
+        address = request.POST.get('address')
+        profile_pic = request.POST.get('profile_pic')
+        password = request.POST.get('password')
 
         try:
             # INSERTING into Customuser Model
@@ -169,17 +177,22 @@ def edit_supervisor_save(request):
             user.last_name = last_name
             user.email = email
             user.username = username
+            user.password = password
             
             user.save()
             
             # INSERTING into supervisor Model
             supervisor_model = Supervisors.objects.get(admin=supervisor_id)
+            supervisor_model.specialization = spec
+            supervisor_model.degree = degree
+            supervisor_model.address = address
             supervisor_model.gender = gender
-            # supervisor_model.profile_pic = profile_pic
+            supervisor_model.profile_pic = profile_pic
             supervisor_model.save()
 
             messages.success(request, "supervisor Updated Successfully.")
-            return redirect('/edit_supervisor/'+supervisor_id)
+            return redirect('/manage_supervisor/')
+            # return redirect('/manage_supervisor/'+supervisor_id)
 
         except:
             messages.error(request, "Failed to Update supervisor.")
@@ -432,15 +445,19 @@ def export_pdf(request):
 
 
 def add_student(request):
-    return render(request, 'hod_template/add_student_template.html')
+    groups = StudentGroups.objects.all()
+
+    context = {
+        "groups": groups
+    }
+    return render(request, 'hod_template/add_student_template.html', context)
 
 def add_student_save(request):
     if request.method != "POST":
         messages.error(request, "Invalid Method")
         return redirect('add_student')
     else:
-
-          
+        
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')
             username = request.POST.get('username')
@@ -448,19 +465,21 @@ def add_student_save(request):
             password = request.POST.get('password')
             address = request.POST.get('address')
             gender = request.POST.get('gender')
+            group_id = request.POST.get('group')
+            group = StudentGroups.objects.get(id=group_id)
             
-
-            try:
-                user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=4)
-                
-                user.students.address = address
-                user.students.gender = gender
-                user.save()
-                messages.success(request, "Student Added Successfully!")
-                return redirect('add_student')
-            except:
-                messages.error(request, "Failed to Add Student!")
-                return redirect('add_student')
+            print(address, gender ,group)
+            # try:
+            user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=4)
+            
+            student = Students(address=address, gender=gender, group=group, admin=user)
+            student.save()
+            user.save()
+            messages.success(request, "Student Added Successfully!")
+            return redirect('manage_student')
+            # except:
+            #     messages.error(request, "Failed to Add Student!")
+            #     return redirect('add_student')
             
 
 
@@ -485,7 +504,7 @@ def edit_student(request, student_id):
     form.fields['first_name'].initial = student.admin.first_name
     form.fields['last_name'].initial = student.admin.last_name
     form.fields['address'].initial = student.address
-    form.fields['group_id'].initial = student.group_id.id
+    form.fields['group_id'].initial = student.group
     form.fields['gender'].initial = student.gender
     
     
@@ -514,6 +533,7 @@ def edit_student_save(request):
             last_name = form.cleaned_data['last_name']
             address = form.cleaned_data['address']
             group_id = form.cleaned_data['group_id']
+            # group = StudentGroups.objects.get(id=group_id)
             gender = form.cleaned_data['gender']
             
 
@@ -551,9 +571,9 @@ def edit_student_save(request):
                 del request.session['student_id']
 
                 messages.success(request, "Student Updated Successfully!")
-                return redirect('/edit_student/'+student_id)
+                return redirect('/manage_student/')
             except:
-                messages.success(request, "Failed to Uupdate Student.")
+                messages.success(request, "Failed to Update Student.")
                 return redirect('/edit_student/'+student_id)
         else:
             return redirect('/edit_student/'+student_id)

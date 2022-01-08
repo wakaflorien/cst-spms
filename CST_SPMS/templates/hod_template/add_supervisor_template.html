@@ -82,23 +82,30 @@
                                         <option value="female" >Female</option>
                                 </select>
                             </div>
-                            <!-- <div class="form-group">
+                            <div class="form-group">
                                 <label>Assign Group </label>
                                 <select class="form-control" name="group">
                                     {% for group in groups %}
-                                        <option value="{{ group.id }}" {% if group.id == group_id.id %} selected {% endif %}>{{ group.group_name }}</option>
+                                        <option value="{{ group.id }}">{{ group.group_name }}</option>
                                     {% endfor %}
                                 </select>
-                            </div> -->
-
-                            <!-- <div class="form-group">
+                            </div>
+                            <div class="form-group">
                                 <label>Address</label>
                                 <textarea class="form-control" name="address" placeholder="Address"></textarea>
-                            </div> -->
-
-                            
-
-
+                            </div>
+                            <div class="form-group">
+                                <label>Specilization</label>
+                                <input type="text" class="form-control" name="spec" placeholder="Specilization">
+                            </div>
+                            <div class="form-group">
+                                <label>Degree</label>
+                                <input type="text" class="form-control" name="degree" placeholder="Degree">
+                            </div>
+                            <div class="form-group">
+                                <label>Profile <Picture></Picture></label>
+                                <input type="file" class="form-control" name="profile_pic" placeholder="Degree">
+                            </div>
                         </div>
                         <!-- /.card-body -->
 

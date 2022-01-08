@@ -14,13 +14,13 @@ from .forms import AddStudentForm, EditStudentForm
 def supervisor_home(request):
     
 
-    studentgroups = StudentGroups.objects.filter(group_id=request.user.id)
+    studentgroups = StudentGroups.objects.all()
     group_id_list = []
     for studentgroup in studentgroups:
         group_id_list.append(studentgroup.id)
     
     
-    students_count = Students.objects.filter(group_id__in=group_id_list).count()
+    students_count = Students.objects.all().count()
     groups_count = studentgroups.count()
 
 

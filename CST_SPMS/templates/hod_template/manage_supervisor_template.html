@@ -68,16 +68,21 @@
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>Username</th>
+                                <th>Email</th>
+                                <th>Degree</th>
+                                <th>Last login</th>
+                                <th>Created at</th>
+                                <th>Action</th>
                             </thead>
                             <tbody>
                                 {% for supervisor in supervisors %}
                                 <tr>
                                 <td>{{ supervisor.admin.id }}</td>
-                                <td>{{ supervisor.admin.gender }}</td>
+                                <td>{{ supervisor.admin.first_name }}</td>
                                 <td>{{ supervisor.admin.last_name }}</td>
                                 <td>{{ supervisor.admin.username }}</td>
                                 <td>{{ supervisor.admin.email }}</td>
-                                <td>{{ supervisor.address }}</td>
+                                <td>{{ supervisor.degree }}</td>
                                 <td>{{ supervisor.admin.last_login }}</td>
                                 <td>{{ supervisor.admin.date_joined }}</td>
                                 <td>
