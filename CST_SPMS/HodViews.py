@@ -261,28 +261,33 @@ def add_group_save(request):
         messages.error(request, "Invalid Method!")
         return redirect('add_group')
     else:
-        username = request.POST.get('username')
+        group_no = request.POST.get('group_no')
         first_name = ''
         last_name = ''
         
         email = ''
-        group_name = request.POST.get('group_name')
+        username = request.POST.get('username')
         password = request.POST.get('password')
         
         
-        
-        
-        
-        try:
+        # try:
+        for i in range(int(group_no)):
+            counter = 0
+            counter = StudentGroups.objects.count()
+            counter += 1
+            username = username+ " " +str(counter)
             user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=3)
-            user.studentgroups.group_name = group_name
+            user.studentgroups.group_name = username
             user.save()
-            
-            messages.success(request, "group Added Successfully!")
-            return redirect('manage_group')
-        except:
-            messages.error(request, "Failed to Add group!")
-            return redirect('add_group')
+            splited = username.split()
+            splited.pop(1)
+            username=''.join(splited)
+            print(username)
+        messages.success(request, "Groups Created Successfully!")
+        return redirect('manage_group')
+        # except:
+        #     messages.error(request, "Failed to Add group!")
+        #     return redirect('add_group')
 
 
 def manage_group(request):

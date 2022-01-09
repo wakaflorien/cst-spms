@@ -26,7 +26,7 @@ def doLogin(request):
     if request.method != "POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
     else:
-        user = EmailBackEnd.authenticate(request, username=request.POST.get('email'), password=request.POST.get('password'))
+        user = EmailBackEnd.authenticate(request, username=request.POST.get('username'), password=request.POST.get('password'))
         if user != None:
             login(request, user)
             user_type = user.user_type
@@ -40,7 +40,7 @@ def doLogin(request):
                 
             elif user_type == '3':
                 # return HttpResponse("Student Login")
-                return redirect('student_home')
+                return redirect('group_home')
             else:
                 messages.error(request, "Invalid Login!")
                 return redirect('login')
