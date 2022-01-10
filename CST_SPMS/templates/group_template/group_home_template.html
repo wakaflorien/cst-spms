@@ -1,7 +1,7 @@
-{% extends 'hod_template/base_template.html' %}
+{% extends 'group_template/base_template.html' %}
 
 {% block page_title %}
-    HOD Dashboard
+    Group Dashboard
 {% endblock page_title %}
 {% block main_content %}
 
@@ -15,7 +15,7 @@
               <!-- small box -->
                     <div style="border-radius:20px; text-align:center"class="small-box bg-info elevation-3" >
                     <div style="color:  #1B4254"class="inner">
-                  <h3></h3>
+                  <h3>{{ students }}</h3>
 
                   <p style="font-weight:bold;font-size:20px">Total Students</p>
                 </div>
@@ -30,7 +30,7 @@
               <!-- small box -->
                     <div style="border-radius:20px; text-align:center"class="small-box bg-info elevation-3" >
                     <div style="color:  #1B4254"class="inner">
-                  <h3>{{ supervisor_count }}</h3>
+                  <h3></h3>
 
                   <p style="font-weight:bold;font-size:20px">Total Supervisors</p>
                 </div>

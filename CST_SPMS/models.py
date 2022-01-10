@@ -58,7 +58,8 @@ class Supervisors(models.Model):
 class Proposals(models.Model):
     id =models.AutoField(primary_key=True)
     proposal_title = models.CharField(max_length=255)
-    promotion = models.OneToOneField(PromotionYear, on_delete=CASCADE)
+    promotion = models.DateField(auto_now_add=True)
+    abstract = models.TextField()
     studentgroup_id = models.ForeignKey(StudentGroups, on_delete=models.CASCADE, default=1) #need to give defauult group
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
