@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="{% static "jqvmap/jqvmap.min.css" %}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css'  %}">
+  <link rel="stylesheet" href="{% static 'dist/css/custom.css'  %}">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="{% static "overlayScrollbars/css/OverlayScrollbars.min.css" %}">
   <!-- Daterange picker -->
@@ -100,7 +101,7 @@
       <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-    {% include 'staff_template/footer.html' %}
+    {% include 'supervisor_template/footer.html' %}
 
     
   </div>
@@ -141,6 +142,7 @@
 <script src="{% static 'dist/js/pages/dashboard.js'  %}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{% static 'dist/js/demo.js'  %}"></script>
+<script src="{% static 'dist/js/custom.js'  %}"></script>
 
 {% comment %} For Custom JS {% endcomment %}
 {% block custom_js %}

@@ -275,14 +275,14 @@ def add_group_save(request):
             counter = 0
             counter = StudentGroups.objects.count()
             counter += 1
-            username = username+ " " +str(counter)
+            username = username+ "_" +str(counter)
             user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=3)
             user.studentgroups.group_name = username
             user.save()
-            splited = username.split()
+            splited = username.split('_')
             splited.pop(1)
             username=''.join(splited)
-            print(username)
+            # print(username)
         messages.success(request, "Groups Created Successfully!")
         return redirect('manage_group')
         # except:
