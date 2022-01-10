@@ -1,4 +1,4 @@
-{% extends 'staff_template/base_template.html' %}
+{% extends 'supervisor_template/base_template.html' %}
 
 {% block page_title %}
     Feedback Message
@@ -45,7 +45,7 @@
                                 </div>
                                 {% endif %}
                             
-                    <form method="POST" action="{% url 'staff_feedback_save' %}">
+                    <form method="POST" action="{% url 'supervisor_feedback_save' %}">
                         {% csrf_token %}
                         <div class="card-body">
                            
@@ -66,9 +66,6 @@
 
                     </div>
                     <!-- /.card -->
-
-
-
                 </div>
             </div>
 

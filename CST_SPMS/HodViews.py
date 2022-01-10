@@ -281,7 +281,7 @@ def add_group_save(request):
             splited = username.split('_')
             splited.pop(1)
             username=''.join(splited)
-            print(username)
+            # print(username)
         messages.success(request, "Groups Created Successfully!")
         return redirect('manage_group')
         # except:
