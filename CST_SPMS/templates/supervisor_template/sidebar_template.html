@@ -63,7 +63,7 @@
                 <li><a href="{{ supervisor_assigned_group }}" class="nav-link {% if request.path == supervisor_assigned_group %} active {% endif %}">Assigned Groups<i class="fa fa-chevron-down"></i></a>
                   <ul>
                     {% for group in groups %}
-                    <li><a href="#">{{ group.group_name }}</a></li>
+                    <li><a href="{% url 'supervisor_assigned_ngroup' group.id %}">{{ group.group_name }}</a></li>
                     {% endfor %}
                   </ul>
                 </li>
