@@ -1,4 +1,8 @@
 {
+<<<<<<< HEAD
   "files.autoSave": "onWindowChange",
   "editor.fontSize": 12
+=======
+    "files.autoSaveDelay": 0
+>>>>>>> d6d3bb8e4dd2a0c39ff903f7778992b61f42f9d8
 }

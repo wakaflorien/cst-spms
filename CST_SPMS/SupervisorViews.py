@@ -7,9 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 import json
 
-from CST_SPMS.models import CustomUser, Projects, FeedBackSupervisor, Proposals,  StudentGroups, Students, PromotionYear, Supervisors
-
-
+from CST_SPMS.models import CustomUser, Projects, FeedBackSupervisor, Proposals,  StudentGroups, Students, PromotionYear, Supervisors, NotificationSupervisors, FeedBackGroup
 
 def supervisor_home(request):
     
@@ -23,9 +21,6 @@ def supervisor_home(request):
     students_count = Students.objects.all().count()
     groups_count = studentgroups.count()
 
-
-    
-
     context={
         "students_count": students_count,
         "groups_count": groups_count,
@@ -33,7 +28,49 @@ def supervisor_home(request):
     }
     return render(request, "supervisor_template/supervisor_home_template.html", context)
 
-def supervisors_feedback(request):
+def supervisor_manage_proposal(request):
+    return render(request, "supervisor_template/supervisor_manage_proposal.html")
+
+def supervisor_assigned_group(request):
+    supervisor = Supervisors.objects.get(admin=request.user.id)
+    all_groups = StudentGroups.objects.filter()
+    supervisors = Supervisors.objects.all()
+
+    for sup in supervisors:
+        # print(group.group.id)
+        for group in all_groups:
+            groups = StudentGroups.objects.filter(id = sup.group.id)
+   
+    print(groups)
+    context = {
+        "groups": groups
+    }
+    return render(request, "supervisor_template/supervisor_assigned_group.html", context)
+
+def group_feedback_message(request):
+    feedbacks = FeedBackGroup.objects.all()
+    context = {
+        "feedbacks": feedbacks
+    }
+    return render(request, 'supervisor_template/group_feedback_template.html', context)
+
+
+@csrf_exempt
+def group_feedback_message_reply(request):
+    feedback_id = request.POST.get('id')
+    feedback_reply = request.POST.get('reply')
+
+    try:
+        feedback = FeedBackSupervisor.objects.get(id=feedback_id)
+        feedback.feedback_reply = feedback_reply
+        feedback.save()
+        return HttpResponse("True")
+
+    except:
+        return HttpResponse("False")
+
+
+def supervisor_feedback(request):
     supervisors_obj = Supervisors.objects.get(admin=request.user.id)
     feedback_data = FeedBackSupervisor.objects.filter(supervisor_id=supervisors_obj)
     context = {
@@ -59,6 +96,27 @@ def supervisor_feedback_save(request):
             messages.error(request, "Failed to Send Feedback.")
             return redirect('supervisor_feedback')
 
+# def supervisor_contact_hod(request):
+#     return render(request, "supervisor_template/supervisor_contact_hod.html")
+
+
+# def supervisor_contact_hod_save(request):
+#     if request.method != "POST":
+#         messages.error(request, "Invalid Method")
+#         return redirect('staff_apply_leave')
+#     else:
+#         leave_date = request.POST.get('leave_date')
+#         leave_message = request.POST.get('leave_message')
+
+#         staff_obj = Supervisors.objects.get(admin=request.user.id)
+#         try:
+#             leave_report = NotificationSupervisors(staff_id=staff_obj, leave_date=leave_date, leave_message=leave_message, leave_status=0)
+#             leave_report.save()
+#             messages.success(request, "Applied for Leave.")
+#             return redirect('staff_apply_leave')
+#         except:
+#             messages.error(request, "Failed to Apply Leave")
+#             return redirect('staff_apply_leave')
 
 # # WE don't need csrf_token when using Ajax
 # @csrf_exempt

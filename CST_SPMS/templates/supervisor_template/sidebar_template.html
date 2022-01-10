@@ -25,8 +25,8 @@
                 with font-awesome or any other icon font library -->
             
             <li class="nav-item">
-              {% url 'staff_home' as staff_home %}
-              <a href="{{ supervisor_home }}" class="nav-link {% if request.path == staff_home %} active {% endif %}">
+              {% url 'supervisor_home' as supervisor_home %}
+              <a href="{{ supervisor_home }}" class="nav-link {% if request.path == supervisor_home %} active {% endif %}">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                   Dashboard
@@ -36,8 +36,8 @@
             </li>
 
             <li class="nav-item">
-              {% url 'staff_take_attendance' as staff_take_attendance %}
-              <a href="{{ supervisor_home }}" class="nav-link {% if request.path == staff_take_attendance %} active {% endif %}">
+              {% url 'supervisor_manage_proposal' as supervisor_manage_proposal %}
+              <a href="{{ supervisor_manage_proposal }}" class="nav-link {% if request.path == supervisor_manage_proposal %} active {% endif %}">
                 <i class="nav-icon fas fa-calendar-plus"></i>
                 <p>
                   Submitted Proposals
@@ -47,19 +47,31 @@
             </li>
 
             <li class="nav-item">
-              {% url 'staff_update_attendance' as staff_update_attendance %}
-              <a href="{{ supervisor_home }}" class="nav-link {% if request.path == staff_update_attendance %} active {% endif %}">
+              {% url 'supervisor_assigned_group' as supervisor_assigned_group %}
+              <a href="{{ supervisor_assigned_group }}" class="nav-link {% if request.path == supervisor_assigned_group %} active {% endif %}">
                 <i class="nav-icon fas fa-tasks"></i>
                 <p>
                   Assigned Groups
-                  {% comment %} <span class="right badge badge-danger">New</span> {% endcomment %}
                 </p>
               </a>
             </li>
-
+            <div class="contenedor-menu">
+              <!-- <a href="" class="btnMenu">Menu <i class="fa fa-bars"></i></a> -->
+          
+              <ul class="menu">
+                <!-- <li><a href="#">Element 1</a></li> -->
+                <li><a href="{{ supervisor_assigned_group }}" class="nav-link {% if request.path == supervisor_assigned_group %} active {% endif %}">Assigned Groups<i class="fa fa-chevron-down"></i></a>
+                  <ul>
+                    {% for group in groups %}
+                    <li><a href="#">{{ group.group_name }}</a></li>
+                    {% endfor %}
+                  </ul>
+                </li>
+              </ul>
+            </div>
             <li class="nav-item">
-              {% url 'staff_add_result' as staff_add_result %}
-              <a href="{{ staff_add_result }}" class="nav-link {% if request.path == staff_add_result %} active {% endif %}">
+              {% url 'group_feedback_message' as group_feedback_message %}
+              <a href="{{ group_feedback_message }}" class="nav-link {% if request.path == group_feedback_message %} active {% endif %}">
                 <i class="nav-icon fas fa-envelope-open-text"></i>
                 <p>
                   Contact Group
@@ -68,23 +80,23 @@
               </a>
             </li>
 
-            <li class="nav-item">
-              {% url 'staff_apply_leave' as staff_apply_leave %}
-              <a href="{{ staff_apply_leave }}" class="nav-link {% if request.path == staff_apply_leave %} active {% endif %}">
+            <!-- <li class="nav-item">
+              {% url 'supervisor_contact_hod' as supervisor_contact_hod %}
+              <a href="{{ supervisor_contact_hod }}" class="nav-link {% if request.path == supervisor_contact_hod %} active {% endif %}">
                 <i class="nav-icon fas fa-envelope-open-text"></i>
                 <p>
                   Contact HOD
                   {% comment %} <span class="right badge badge-danger">New</span> {% endcomment %}
                 </p>
               </a>
-            </li>
+            </li> -->
 
             <li class="nav-item">
-              {% url 'staff_feedback' as staff_feedback %}
-              <a href="{{ staff_feedback }}" class="nav-link {% if request.path == staff_feedback %} active {% endif %}">
+              {% url 'supervisor_feedback' as supervisor_feedback %}
+              <a href="{{ supervisor_feedback }}" class="nav-link {% if request.path == supervisor_feedback %} active {% endif %}">
                 <i class="nav-icon fas fa-comments"></i>
                 <p>
-                  Feedback
+                  Contact HOD 
                   {% comment %} <span class="right badge badge-danger">New</span> {% endcomment %}
                 </p>
               </a>

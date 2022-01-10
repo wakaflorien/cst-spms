@@ -23,7 +23,6 @@
                         <p style="font-weight: bold; font-size: 20px">Supervised Groups</p>
                     </div>
                     
-                    <!-- <a style="background-color: #1B4254"href="{% url 'supervisor_take_attendance' %}" class="small-box-footer">Read more </a> -->
                     </div>
                 </div>
                 <!-- ./col -->
@@ -35,8 +34,7 @@
 
                         <p style="font-weight: bold; font-size: 20px">Total Proposals</p>
                     </div>
-                    
-                    <!-- <a style="background-color: #1B4254"href="{% url 'staff_take_attendance' %}" class="small-box-footer">Read more </a> -->
+
                     </div>
                 </div>
                 <!-- ./col -->
@@ -49,7 +47,6 @@
                         <p style="font-weight: bold; font-size: 20px">Talk Room</p>
                     </div>
                    
-                    <!-- <a style="background-color: #1B4254"href="{% url 'staff_apply_leave' %}" class="small-box-footer">Read more </a> -->
                     </div>
                 </div>
                 <!-- ./col -->
@@ -140,7 +137,7 @@
             ],
             datasets: [
                 {
-                data: [{{ leave_count }}, {{ attendance_count }}],
+                // data: [{{ leave_count }}, {{ attendance_count }}],
                 backgroundColor : ['#f56954', '#00a65a'],
                 }
             ]
@@ -166,8 +163,8 @@
             var data_present = {{ data_present }}
             var data_absent = {{ data_absent }}
             */
-            var attendance_list = {{ attendance_list }}
-            var subject_list = {{ subject_list|safe }}
+            // var attendance_list = {{ attendance_list }}
+            // var subject_list = {{ subject_list|safe }}
 
             //Dataset for Bar Chart
             
@@ -208,9 +205,9 @@
 
 
             //Code for Stuent Attendnace by Subjects Bar Chart
-            var student_list = {{ student_list|safe }};
-            var attendance_present_list = {{ attendance_present_list }}
-            var attendance_absent_list = {{ attendance_absent_list }}
+            // var student_list = {{ student_list|safe }};
+            // var attendance_present_list = {{ attendance_present_list }}
+            // var attendance_absent_list = {{ attendance_absent_list }}
 
             var areaChartData2 = {
             labels  : student_list,
