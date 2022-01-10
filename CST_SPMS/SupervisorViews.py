@@ -47,6 +47,16 @@ def supervisor_assigned_group(request):
     }
     return render(request, "supervisor_template/supervisor_assigned_group.html", context)
 
+def supervisor_assigned_ngroup(request, group_id):
+    
+    groups = StudentGroups.objects.filter(id = group_id)
+   
+    print(groups)
+    context = {
+        "groups": groups,
+        "id": group_id
+    }
+    return render(request, "supervisor_template/supervisor_assigned_ngroup.html", context)
 def group_feedback_message(request):
     feedbacks = FeedBackGroup.objects.all()
     context = {
