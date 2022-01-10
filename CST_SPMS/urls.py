@@ -52,19 +52,12 @@ urlpatterns = [
     # path('delete_subject/<subject_id>/', HodViews.delete_subject, name="delete_subject"),
     path('check_email_exist/', HodViews.check_email_exist, name="check_email_exist"),
     path('check_username_exist/', HodViews.check_username_exist, name="check_username_exist"),
-    # path('student_feedback_message/', HodViews.student_feedback_message, name="student_feedback_message"),
-    # path('student_feedback_message_reply/', HodViews.student_feedback_message_reply, name="student_feedback_message_reply"),
+
+    path('group_feedback_message/', SupervisorViews.group_feedback_message, name="group_feedback_message"),
+    path('group_feedback_message_reply/', SupervisorViews.group_feedback_message_reply, name="group_feedback_message_reply"),
+
     path('supervisor_feedback_message/', HodViews.supervisor_feedback_message, name="supervisor_feedback_message"),
     path('supervisor_feedback_message_reply/', HodViews.supervisor_feedback_message_reply, name="supervisor_feedback_message_reply"),
-    # path('student_leave_view/', HodViews.student_leave_view, name="student_leave_view"),
-    # path('student_leave_approve/<leave_id>/', HodViews.student_leave_approve, name="student_leave_approve"),
-    # path('student_leave_reject/<leave_id>/', HodViews.student_leave_reject, name="student_leave_reject"),
-    # path('supervisor_leave_view/', HodViews.supervisor_leave_view, name="staff_leave_view"),
-    # path('staff_leave_approve/<leave_id>/', HodViews.staff_leave_approve, name="staff_leave_approve"),
-    # path('staff_leave_reject/<leave_id>/', HodViews.staff_leave_reject, name="staff_leave_reject"),
-    # path('admin_view_attendance/', HodViews.admin_view_attendance, name="admin_view_attendance"),
-    # path('admin_get_attendance_dates/', HodViews.admin_get_attendance_dates, name="admin_get_attendance_dates"),
-    # path('admin_get_attendance_student/', HodViews.admin_get_attendance_student, name="admin_get_attendance_student"),
     path('admin_profile/', HodViews.admin_profile, name="admin_profile"),
     path('admin_profile_update/', HodViews.admin_profile_update, name="admin_profile_update"),
     
@@ -72,21 +65,15 @@ urlpatterns = [
 
     # # URLS for Staff
     path('supervisor_home/', SupervisorViews.supervisor_home, name="supervisor_home"),
-    # path('staff_take_attendance/', SupervisorViews.staff_take_attendance, name="staff_take_attendance"),
-    # path('get_students/', SupervisorViews.get_students, name="get_students"),
-    # path('save_attendance_data/', SupervisorViews.save_attendance_data, name="save_attendance_data"),
-    # path('staff_update_attendance/', SupervisorViews.staff_update_attendance, name="staff_update_attendance"),
-    # path('get_attendance_dates/', SupervisorViews.get_attendance_dates, name="get_attendance_dates"),
-    # path('get_attendance_student/', SupervisorViews.get_attendance_student, name="get_attendance_student"),
-    # path('update_attendance_data/', SupervisorViews.update_attendance_data, name="update_attendance_data"),
-    # path('staff_apply_leave/', SupervisorViews.staff_apply_leave, name="staff_apply_leave"),
-    # path('staff_apply_leave_save/', SupervisorViews.staff_apply_leave_save, name="staff_apply_leave_save"),
-    # path('staff_feedback/', SupervisorViews.staff_feedback, name="staff_feedback"),
-    # path('staff_feedback_save/', SupervisorViews.staff_feedback_save, name="staff_feedback_save"),
+    path('supervisor_manage_proposal/', SupervisorViews.supervisor_manage_proposal, name="supervisor_manage_proposal"),
+    path('supervisor_assigned_group/', SupervisorViews.supervisor_assigned_group, name="supervisor_assigned_group"),
+    # path('supervisor_contact_group/', SupervisorViews.supervisor_contact_group, name="supervisor_contact_group"),
+    # path('supervisor_contact_hod/', SupervisorViews.supervisor_contact_hod, name="supervisor_contact_hod"),
+    path('supervisor_feedback/', SupervisorViews.supervisor_feedback, name="supervisor_feedback"),
+    path('supervisor_feedback_save/', SupervisorViews.supervisor_feedback_save, name="supervisor_feedback_save"),
+
     path('supervisor_profile/', SupervisorViews.supervisor_profile, name="supervisor_profile"),
     path('supervisor_profile_update/', SupervisorViews.supervisor_profile_update, name="supervisor_profile_update"),
-    # path('staff_add_result/', SupervisorViews.staff_add_result, name="staff_add_result"),
-    # path('staff_add_result_save/', SupervisorViews.staff_add_result_save, name="staff_add_result_save"),
 
     # URSL for Student
     path('group_home/', GroupViews.group_home, name="group_home"),
