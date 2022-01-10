@@ -8,7 +8,6 @@ from django.core import serializers
 import json
 
 from CST_SPMS.models import CustomUser, Projects, Proposals,  StudentGroups, Students, PromotionYear, Supervisors, FeedBackSupervisor
-from .forms import AddStudentForm, EditStudentForm
 
 import json
 import csv
@@ -275,11 +274,11 @@ def add_group_save(request):
             counter = 0
             counter = StudentGroups.objects.count()
             counter += 1
-            username = username+ " " +str(counter)
+            username = username+ "_" +str(counter)
             user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=3)
             user.studentgroups.group_name = username
             user.save()
-            splited = username.split()
+            splited = username.split('_')
             splited.pop(1)
             username=''.join(splited)
             print(username)
@@ -497,200 +496,104 @@ def manage_student(request):
 
 
 
-def edit_student(request, student_id):
-    # Adding Student ID into Session Variable
-    request.session['student_id'] = student_id
+# def edit_student(request, student_id):
+#     # Adding Student ID into Session Variable
+#     request.session['student_id'] = student_id
 
-    student = Students.objects.get(admin=student_id)
-    form = EditStudentForm()
-    # Filling the form with Data from Database
-    form.fields['email'].initial = student.admin.email
-    form.fields['username'].initial = student.admin.username
-    form.fields['first_name'].initial = student.admin.first_name
-    form.fields['last_name'].initial = student.admin.last_name
-    form.fields['address'].initial = student.address
-    form.fields['group_id'].initial = student.group
-    form.fields['gender'].initial = student.gender
+#     student = Students.objects.get(admin=student_id)
+#     form = EditStudentForm()
+#     # Filling the form with Data from Database
+#     form.fields['email'].initial = student.admin.email
+#     form.fields['username'].initial = student.admin.username
+#     form.fields['first_name'].initial = student.admin.first_name
+#     form.fields['last_name'].initial = student.admin.last_name
+#     form.fields['address'].initial = student.address
+#     form.fields['group_id'].initial = student.group
+#     form.fields['gender'].initial = student.gender
     
     
 
-    context = {
-        "id": student_id,
-        "username": student.admin.username,
-        "form": form
-    }
-    return render(request, "hod_template/edit_student_template.html", context)
+#     context = {
+#         "id": student_id,
+#         "username": student.admin.username,
+#         "form": form
+#     }
+#     return render(request, "hod_template/edit_student_template.html", context)
 
 
-def edit_student_save(request):
-    if request.method != "POST":
-        return HttpResponse("Invalid Method!")
-    else:
-        student_id = request.session.get('student_id')
-        if student_id == None:
-            return redirect('/manage_student')
+# def edit_student_save(request):
+#     if request.method != "POST":
+#         return HttpResponse("Invalid Method!")
+#     else:
+#         student_id = request.session.get('student_id')
+#         if student_id == None:
+#             return redirect('/manage_student')
 
-        form = EditStudentForm(request.POST, request.FILES)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            username = form.cleaned_data['username']
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-            address = form.cleaned_data['address']
-            group_id = form.cleaned_data['group_id']
-            # group = StudentGroups.objects.get(id=group_id)
-            gender = form.cleaned_data['gender']
+#         form = EditStudentForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             email = form.cleaned_data['email']
+#             username = form.cleaned_data['username']
+#             first_name = form.cleaned_data['first_name']
+#             last_name = form.cleaned_data['last_name']
+#             address = form.cleaned_data['address']
+#             group_id = form.cleaned_data['group_id']
+#             # group = StudentGroups.objects.get(id=group_id)
+#             gender = form.cleaned_data['gender']
             
 
-            # Getting Profile Pic first
-            # First Check whether the file is selected or not
-            # Upload only if file is selected
-            if len(request.FILES) != 0:
-                profile_pic = request.FILES['profile_pic']
-                fs = FileSystemStorage()
-                filename = fs.save(profile_pic.name, profile_pic)
-                profile_pic_url = fs.url(filename)
-            else:
-                profile_pic_url = None
+#             # Getting Profile Pic first
+#             # First Check whether the file is selected or not
+#             # Upload only if file is selected
+#             if len(request.FILES) != 0:
+#                 profile_pic = request.FILES['profile_pic']
+#                 fs = FileSystemStorage()
+#                 filename = fs.save(profile_pic.name, profile_pic)
+#                 profile_pic_url = fs.url(filename)
+#             else:
+#                 profile_pic_url = None
 
-            try:
-                # First Update into Custom User Model
-                user = CustomUser.objects.get(id=student_id)
-                user.first_name = first_name
-                user.last_name = last_name
-                user.email = email
-                user.username = username
-                user.save()
+#             try:
+#                 # First Update into Custom User Model
+#                 user = CustomUser.objects.get(id=student_id)
+#                 user.first_name = first_name
+#                 user.last_name = last_name
+#                 user.email = email
+#                 user.username = username
+#                 user.save()
 
-                # Then Update Students Table
-                student_model = Students.objects.get(admin=student_id)
-                student_model.address = address
+#                 # Then Update Students Table
+#                 student_model = Students.objects.get(admin=student_id)
+#                 student_model.address = address
 
-                group = StudentGroups.objects.get(id=id)
-                student_model.group_id = group
-                student_model.gender = gender
-                if profile_pic_url != None:
-                    student_model.profile_pic = profile_pic_url
-                student_model.save()
-                # Delete student_id SESSION after the data is updated
-                del request.session['student_id']
+#                 group = StudentGroups.objects.get(id=id)
+#                 student_model.group_id = group
+#                 student_model.gender = gender
+#                 if profile_pic_url != None:
+#                     student_model.profile_pic = profile_pic_url
+#                 student_model.save()
+#                 # Delete student_id SESSION after the data is updated
+#                 del request.session['student_id']
 
-                messages.success(request, "Student Updated Successfully!")
-                return redirect('/manage_student/')
-            except:
-                messages.success(request, "Failed to Update Student.")
-                return redirect('/edit_student/'+student_id)
-        else:
-            return redirect('/edit_student/'+student_id)
-
-
-def delete_student(request, student_id):
-    student = Students.objects.get(admin=student_id)
-    try:
-        student.delete()
-        messages.success(request, "Student Deleted Successfully.")
-        return redirect('manage_student')
-    except:
-        messages.error(request, "Failed to Delete Student.")
-        return redirect('manage_student')
+#                 messages.success(request, "Student Updated Successfully!")
+#                 return redirect('/manage_student/')
+#             except:
+#                 messages.success(request, "Failed to Update Student.")
+#                 return redirect('/edit_student/'+student_id)
+#         else:
+#             return redirect('/edit_student/'+student_id)
 
 
-# def add_subject(request):
-#     courses = Courses.objects.all()
-#     staffs = CustomUser.objects.filter(user_type='2')
-#     context = {
-#         "courses": courses,
-#         "staffs": staffs
-#     }
-#     return render(request, 'hod_template/add_subject_template.html', context)
-
-
-
-# def add_subject_save(request):
-#     if request.method != "POST":
-#         messages.error(request, "Method Not Allowed!")
-#         return redirect('add_subject')
-#     else:
-#         subject_name = request.POST.get('subject')
-
-#         course_id = request.POST.get('course')
-#         course = Courses.objects.get(id=course_id)
-        
-#         staff_id = request.POST.get('staff')
-#         staff = CustomUser.objects.get(id=staff_id)
-
-#         try:
-#             subject = Subjects(subject_name=subject_name, course_id=course, staff_id=staff)
-#             subject.save()
-#             messages.success(request, "Subject Added Successfully!")
-#             return redirect('add_subject')
-#         except:
-#             messages.error(request, "Failed to Add Subject!")
-#             return redirect('add_subject')
-
-
-# def manage_subject(request):
-#     subjects = Subjects.objects.all()
-#     context = {
-#         "subjects": subjects
-#     }
-#     return render(request, 'hod_template/manage_subject_template.html', context)
-
-
-# def edit_subject(request, subject_id):
-#     subject = Subjects.objects.get(id=subject_id)
-#     courses = Courses.objects.all()
-#     staffs = CustomUser.objects.filter(user_type='2')
-#     context = {
-#         "subject": subject,
-#         "courses": courses,
-#         "staffs": staffs,
-#         "id": subject_id
-#     }
-#     return render(request, 'hod_template/edit_subject_template.html', context)
-
-
-# def edit_subject_save(request):
-#     if request.method != "POST":
-#         HttpResponse("Invalid Method.")
-#     else:
-#         subject_id = request.POST.get('subject_id')
-#         subject_name = request.POST.get('subject')
-#         course_id = request.POST.get('course')
-#         staff_id = request.POST.get('staff')
-
-#         try:
-#             subject = Subjects.objects.get(id=subject_id)
-#             subject.subject_name = subject_name
-
-#             course = Courses.objects.get(id=course_id)
-#             subject.course_id = course
-
-#             staff = CustomUser.objects.get(id=staff_id)
-#             subject.staff_id = staff
-            
-#             subject.save()
-
-#             messages.success(request, "Subject Updated Successfully.")
-#             # return redirect('/edit_subject/'+subject_id)
-#             return HttpResponseRedirect(reverse("edit_subject", kwargs={"subject_id":subject_id}))
-
-#         except:
-#             messages.error(request, "Failed to Update Subject.")
-#             return HttpResponseRedirect(reverse("edit_subject", kwargs={"subject_id":subject_id}))
-#             # return redirect('/edit_subject/'+subject_id)
-
-
-
-# def delete_subject(request, subject_id):
-#     subject = Subjects.objects.get(id=subject_id)
+# def delete_student(request, student_id):
+#     student = Students.objects.get(admin=student_id)
 #     try:
-#         subject.delete()
-#         messages.success(request, "Subject Deleted Successfully.")
-#         return redirect('manage_subject')
+#         student.delete()
+#         messages.success(request, "Student Deleted Successfully.")
+#         return redirect('manage_student')
 #     except:
-#         messages.error(request, "Failed to Delete Subject.")
-#         return redirect('manage_subject')
+#         messages.error(request, "Failed to Delete Student.")
+#         return redirect('manage_student')
+
+
 
 
 @csrf_exempt

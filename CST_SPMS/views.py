@@ -44,6 +44,7 @@ def doLogin(request):
             else:
                 messages.error(request, "Invalid Login!")
                 return redirect('login')
+             
         else:
             messages.error(request, "Invalid Login Credentials!")
             #return HttpResponseRedirect("/")

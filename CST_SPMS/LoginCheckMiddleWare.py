@@ -29,11 +29,12 @@ class LoginCheckMiddleWare(MiddlewareMixin):
                     return redirect("supervisor_home")
             
             elif user.user_type == "3":
-                if modulename == "CST_SPMS.StudentViews":
+                if modulename == "CST_SPMS.GroupViews":
                     pass
                 elif modulename == "CST_SPMS.views" or modulename == "django.views.static":
                     pass
                 else:
+                    
                     return redirect("group_home")
 
             else:

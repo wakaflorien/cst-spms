@@ -8,7 +8,7 @@ from django.core import serializers
 import json
 
 from CST_SPMS.models import CustomUser, Projects, FeedBackSupervisor, Proposals,  StudentGroups, Students, PromotionYear, Supervisors
-from .forms import AddStudentForm, EditStudentForm
+
 
 
 def supervisor_home(request):
