@@ -94,7 +94,9 @@ class Students(models.Model):
 
 class FeedBackGroup(models.Model):
     id = models.AutoField(primary_key=True)
-    studentgroup_id = models.ForeignKey(StudentGroups, on_delete=models.CASCADE)
+    group = models.ForeignKey(StudentGroups, on_delete = models.CASCADE, null=True)
+    hod = models.ForeignKey(AdminHOD, on_delete=models.CASCADE, null=True)
+    supervisor = models.ForeignKey(Supervisors, on_delete=models.CASCADE, null=True)
     feedback = models.TextField()
     feedback_reply = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -103,7 +105,9 @@ class FeedBackGroup(models.Model):
 
 class FeedBackHOD(models.Model):
     id = models.AutoField(primary_key=True)
-    hod_id = models.ForeignKey(AdminHOD, on_delete=models.CASCADE)
+    hod = models.ForeignKey(AdminHOD, on_delete=models.CASCADE, null=True)
+    supervisor = models.ForeignKey(Supervisors, on_delete=models.CASCADE, null=True)
+    group = models.ForeignKey(StudentGroups, on_delete = models.CASCADE, null=True)
     feedback = models.TextField()
     feedback_reply = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -113,7 +117,9 @@ class FeedBackHOD(models.Model):
 
 class FeedBackSupervisor(models.Model):
     id = models.AutoField(primary_key=True)
-    supervisor_id = models.ForeignKey(Supervisors, on_delete=models.CASCADE)
+    supervisor_id = models.ForeignKey(Supervisors, on_delete=models.CASCADE, null=True)
+    hod = models.ForeignKey(AdminHOD, on_delete = models.CASCADE, null=True)
+    group = models.ForeignKey(StudentGroups, on_delete = models.CASCADE, null=True)
     feedback = models.TextField()
     feedback_reply = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

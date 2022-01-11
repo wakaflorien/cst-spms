@@ -62,6 +62,7 @@ urlpatterns = [
     path('supervisor_home/', SupervisorViews.supervisor_home, name="supervisor_home"),
     path('supervisor_manage_proposal/', SupervisorViews.supervisor_manage_proposal, name="supervisor_manage_proposal"),
     path('supervisor_assigned_group/', SupervisorViews.supervisor_assigned_group, name="supervisor_assigned_group"),
+    path('supervisor_assigned_group/<group_id>', SupervisorViews.supervisor_assigned_ngroup, name="supervisor_assigned_ngroup"),
     # path('supervisor_contact_group/', SupervisorViews.supervisor_contact_group, name="supervisor_contact_group"),
     # path('supervisor_contact_hod/', SupervisorViews.supervisor_contact_hod, name="supervisor_contact_hod"),
     path('supervisor_feedback/', SupervisorViews.supervisor_feedback, name="supervisor_feedback"),
