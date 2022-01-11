@@ -11,44 +11,28 @@
         <div class="container-fluid">
           <!-- Small boxes (Stat box) -->
           <div class="row">
-            <div class="col-lg-3 col-6">
+            <div class="col-lg-4 col-6">
               <!-- small box -->
                     <div style="border-radius:20px; text-align:center"class="small-box bg-info elevation-3" >
                     <div style="color:  #1B4254"class="inner">
-                  <h3>{{ students }}</h3>
+                  <h3>{{ member_no }}</h3>
 
-                  <p style="font-weight:bold;font-size:20px">Total Students</p>
+                  <p style="font-weight:bold;font-size:20px">Total Members</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-stats-bars"></i>
                 </div>
-                <a style="background-color: #1B4254"href="" class="small-box-footer">More </a>
+                <a style="background-color: #1B4254"href="{% url 'manage_member' %}" class="small-box-footer">More </a>
               </div>
             </div>
             <!-- ./col -->
-            <div class="col-lg-3 col-6">
+            <div class="col-lg-4 col-6">
               <!-- small box -->
                     <div style="border-radius:20px; text-align:center"class="small-box bg-info elevation-3" >
                     <div style="color:  #1B4254"class="inner">
-                  <h3></h3>
+                  <h3>1</h3>
 
-                  <p style="font-weight:bold;font-size:20px">Total Supervisors</p>
-                </div>
-                <div class="icon">
-                  <i class="ion ion-stats-bars"></i>
-                </div>
-                <a style="background-color: #1B4254"href="{% url 'manage_supervisor' %}" class="small-box-footer">More </a>
-              </div>
-            </div>
-            <!-- ./col -->
-            
-            <div class="col-lg-3 col-6">
-              <!-- small box -->
-              <div style="border-radius:20px; text-align:center"class="small-box bg-info elevation-3" >
-                <div style="color:  #1B4254"class="inner">
-                  <h3>{{ group_count }}</h3>
-
-                  <p style="font-weight:bold;font-size:20px">Total Groups</p>
+                  <p style="font-weight:bold;font-size:20px">Supervisor</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-stats-bars"></i>
@@ -57,21 +41,23 @@
               </div>
             </div>
             <!-- ./col -->
-            <div class="col-lg-3 col-6">
+            
+            <div class="col-lg-4 col-6">
               <!-- small box -->
-                    <div style="border-radius:20px; text-align:center"class="small-box bg-info elevation-3" >
-                    <div style="color:  #1B4254"class="inner">
-                  <h3>{{ project_count }}</h3>
+              <div style="border-radius:20px; text-align:center"class="small-box bg-info elevation-3" >
+                <div style="color:  #1B4254"class="inner">
+                  <h3>{{ proposals_no }}</h3>
 
-                  <p style="font-weight:bold;font-size:20px">Total Projects</p>
+                  <p style="font-weight:bold;font-size:20px">Total Proposals</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-stats-bars"></i>
                 </div>
-                <a style="background-color: #1B4254"href="" class="small-box-footer">More </a>
+                <a style="background-color: #1B4254"href="{% url 'manage_group' %}" class="small-box-footer">More </a>
               </div>
             </div>
             <!-- ./col -->
+           
             
           </div>
           <!-- /.row -->
