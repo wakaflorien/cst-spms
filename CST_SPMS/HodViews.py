@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 import json
 
-from CST_SPMS.models import CustomUser, Projects, Proposals,  StudentGroups, Students, PromotionYear, Supervisors, FeedBackSupervisor
+from CST_SPMS.models import AdminHOD, CustomUser, Projects, Proposals,  StudentGroups, Students, PromotionYear, Supervisors, FeedBackSupervisor
 from .forms import AddStudentForm, EditStudentForm
 
 import json
@@ -713,26 +713,35 @@ def check_username_exist(request):
         return HttpResponse(False)
 
 def supervisor_feedback_message(request):
-    feedbacks = FeedBackSupervisor.objects.all()
+    hod_obj = AdminHOD.objects.get(admin=request.user.id)
+    feedback_data = FeedBackSupervisor.objects.all()
+    # print(feedback_data)
+    for data in feedback_data:
+        feedback = data.supervisor_id.admin.first_name
+        sender_id = data.supervisor_id.id
+        print(feedback, sender_id)
     context = {
-        "feedbacks": feedbacks
+        "feedback_data":feedback_data,
+        "sender": feedback,
+        "id": sender_id
     }
-    return render(request, 'hod_template/supervisor_feedback_template.html', context)
+    return render(request, "hod_template/supervisor_feedback_template.html", context)
 
 
 @csrf_exempt
 def supervisor_feedback_message_reply(request):
-    feedback_id = request.POST.get('id')
-    feedback_reply = request.POST.get('reply')
+    feedback_id = request.POST.get('to')
+    feedback_reply = request.POST.get('feedback_message')
 
-    try:
-        feedback = FeedBackSupervisor.objects.get(id=feedback_id)
-        feedback.feedback_reply = feedback_reply
-        feedback.save()
-        return HttpResponse("True")
+    # try:
+    feedback = FeedBackSupervisor.objects.get(id=feedback_id)
+    feedback.feedback_reply = feedback_reply
+    feedback.save()
+    messages.success(request, "Replied Successfully.")
+    return redirect('supervisor_feedback_message')
 
-    except:
-        return HttpResponse("False")
+    # except:
+    #     return HttpResponse("False")
 
 
 # def student_leave_view(request):
