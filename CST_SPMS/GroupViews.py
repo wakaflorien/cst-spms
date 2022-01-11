@@ -5,60 +5,26 @@ from django.core.files.storage import FileSystemStorage #To upload Profile Pictu
 from django.urls import reverse
 import datetime # To Parse input DateTime into Python Date Time Object
 
-from CST_SPMS.models import CustomUser, StudentGroups,  Students, Proposals, Projects
+from CST_SPMS.models import CustomUser, StudentGroups,  Students, Proposals, Projects,FeedBackGroup
 
 
 def group_home(request):
     # group_obj = StudentGroups.objects.get(admin=request.user.id)
 
-    user = CustomUser.objects.get(id=request.user.id)
-    group_obj = StudentGroups.objects.get(admin=user)
+    user = StudentGroups.objects.get(admin=request.user.id)
+    # members = Students.objects.get(group_id=user)
+    member_no = Students.objects.filter(group_id=user).count()
+    proposals_no = Proposals.objects.filter(studentgroup_id = user).count()
 
     context={
         "user": user,
-        "group_obj": group_obj
+        # "members": members,
+        "member_no":member_no,
+        "proposals_no":proposals_no,
+       
     }
-    # context={
-    #     "group_obj": group_obj,
-    # #     "attendance_present": attendance_present,
-    # # #     "attendance_absent": attendance_absent,
-    # # #     "total_proposals": total_subjects,
-    # # #     "subject_name": subject_name,
-    # # #     "data_present": data_present,
-    # # #     "data_absent": data_absent
-    # }
 
-    
     return render(request, "group_template/group_home_template.html", context)
-
-
-
-# def group_feedback(request):
-#     group_obj = groups.objects.get(admin=request.user.id)
-#     feedback_data = FeedBackgroup.objects.filter(group_id=group_obj)
-#     context = {
-#         "feedback_data": feedback_data
-#     }
-#     return render(request, 'group_template/group_feedback.html', context)
-
-
-# def group_feedback_save(request):
-#     if request.method != "POST":
-#         messages.error(request, "Invalid Method.")
-#         return redirect('group_feedback')
-#     else:
-#         feedback = request.POST.get('feedback_message')
-#         group_obj = groups.objects.get(admin=request.user.id)
-
-#         try:
-#             add_feedback = FeedBackgroup(group_id=group_obj, feedback=feedback, feedback_reply="")
-#             add_feedback.save()
-#             messages.success(request, "Feedback Sent.")
-#             return redirect('group_feedback')
-#         except:
-#             messages.error(request, "Failed to Send Feedback.")
-#             return redirect('group_feedback')
-
 
 
 def group_profile(request):
@@ -206,6 +172,7 @@ def edit_member_save(request):
 #The following are views for project proposals
 def add_proposal(request):
     
+    
     groups = CustomUser.objects.filter(user_type='3')
     context = {
         
@@ -225,7 +192,7 @@ def add_proposal_save(request):
         abstract = request.POST.get('abstract')
         
         
-        group = StudentGroups.objects.get(id=request.user.id)
+        group = StudentGroups.objects.get(admin=request.user.id)
 
         # try:
         proposal = Proposals(proposal_title=proposal_title,promotion=promotion, abstract=abstract, studentgroup_id=group)
@@ -238,10 +205,18 @@ def add_proposal_save(request):
 
 
 def manage_proposal(request):
-    proposals = Proposals.objects.filter(studentgroup_id = request.user.id)
+
+    user = StudentGroups.objects.get(admin=request.user.id)
+    # member_no = Students.objects.filter(group_id=user).count()
+
+
+    proposals = Proposals.objects.filter(studentgroup_id = user)
+    
     context = {
-        "proposals": proposals
+        "proposals": proposals,
+        
     }
+    print(proposals)
     return render(request, 'group_template/manage_proposal_template.html', context)
 
 
@@ -300,5 +275,52 @@ def delete_proposal(request, proposal_id):
         return redirect('manage_proposal')
 
 
+def group_feedback(request):
+    group_obj = StudentGroups.objects.get(admin=request.user.id)
+    feedback_data = FeedBackGroup.objects.filter(studentgroup_id=group_obj)
+    context = {
+        "feedback_data": feedback_data
+    }
+    return render(request, 'group_template/group_contact_supervisor.html', context)
 
+
+def group_feedback_save(request):
+    if request.method != "POST":
+        messages.error(request, "Invalid Method.")
+        return redirect('group_feedback')
+    else:
+        feedback = request.POST.get('feedback_message')
+        group_obj = StudentGroups.objects.get(admin=request.user.id)
+
+        try:
+            add_feedback = FeedBackGroup(studentgroup_id=group_obj, feedback=feedback, feedback_reply="")
+            add_feedback.save()
+            messages.success(request, "Feedback Sent.")
+            return redirect('group_feedback')
+        except:
+            messages.error(request, "Failed to Send Feedback.")
+            return redirect('group_feedback')
+
+
+# def group_contact_hod(request):
+#     return render(request, "group_template/group_contact_hod.html")
+
+
+# def group_contact_hod_save(request):
+#     if request.method != "POST":
+#         messages.error(request, "Invalid Method")
+#         return redirect('staff_apply_leave')
+#     else:
+#         leave_date = request.POST.get('leave_date')
+#         leave_message = request.POST.get('leave_message')
+
+#         staff_obj = groups.objects.get(admin=request.user.id)
+#         try:
+#             leave_report = Notificationgroups(staff_id=staff_obj, leave_date=leave_date, leave_message=leave_message, leave_status=0)
+#             leave_report.save()
+#             messages.success(request, "Applied for Leave.")
+#             return redirect('staff_apply_leave')
+#         except:
+#             messages.error(request, "Failed to Apply Leave")
+#             return redirect('staff_apply_leave')
 

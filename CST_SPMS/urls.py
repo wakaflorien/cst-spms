@@ -90,8 +90,8 @@ urlpatterns = [
     # path('student_view_attendance_post/', StudentViews.student_view_attendance_post, name="student_view_attendance_post"),
     # path('student_apply_leave/', StudentViews.student_apply_leave, name="student_apply_leave"),
     # path('student_apply_leave_save/', StudentViews.student_apply_leave_save, name="student_apply_leave_save"),
-    # path('student_feedback/', StudentViews.student_feedback, name="student_feedback"),
-    # path('student_feedback_save/', StudentViews.student_feedback_save, name="student_feedback_save"),
+    path('group_feedback/', GroupViews.group_feedback, name="group_feedback"),
+    path('group_feedback_save/', GroupViews.group_feedback_save, name="group_feedback_save"),
 
     # path('student_view_result/', StudentViews.student_view_result, name="student_view_result"),
 ]
