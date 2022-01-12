@@ -61,6 +61,7 @@ class Proposals(models.Model):
     promotion = models.DateField(auto_now_add=True)
     abstract = models.TextField()
     studentgroup_id = models.ForeignKey(StudentGroups, on_delete=models.CASCADE, default=1) #need to give defauult group
+    status = models.TextField(default="",null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()

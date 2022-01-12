@@ -7,12 +7,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 import json
 
-<<<<<<< HEAD
-from CST_SPMS.models import CustomUser, Projects, Proposals,  StudentGroups, Students, PromotionYear, Supervisors, FeedBackSupervisor
-=======
-from CST_SPMS.models import AdminHOD, CustomUser, Projects, Proposals,  StudentGroups, Students, PromotionYear, Supervisors, FeedBackSupervisor
-from .forms import AddStudentForm, EditStudentForm
->>>>>>> ac3c555407b32f9cc761721ea91449418327efcf
+from CST_SPMS.models import AdminHOD, CustomUser, FeedBackGroup, FeedBackHOD, Projects, Proposals,  StudentGroups, Students, PromotionYear, Supervisors, FeedBackSupervisor
+# from .forms import AddStudentForm, EditStudentForm
 
 import json
 import csv
@@ -499,107 +495,12 @@ def manage_student(request):
     }
     return render(request, 'hod_template/manage_student_template.html', context)
 
-
-
-# def edit_student(request, student_id):
-#     # Adding Student ID into Session Variable
-#     request.session['student_id'] = student_id
-
-#     student = Students.objects.get(admin=student_id)
-#     form = EditStudentForm()
-#     # Filling the form with Data from Database
-#     form.fields['email'].initial = student.admin.email
-#     form.fields['username'].initial = student.admin.username
-#     form.fields['first_name'].initial = student.admin.first_name
-#     form.fields['last_name'].initial = student.admin.last_name
-#     form.fields['address'].initial = student.address
-#     form.fields['group_id'].initial = student.group
-#     form.fields['gender'].initial = student.gender
-    
-    
-
-#     context = {
-#         "id": student_id,
-#         "username": student.admin.username,
-#         "form": form
-#     }
-#     return render(request, "hod_template/edit_student_template.html", context)
-
-
-# def edit_student_save(request):
-#     if request.method != "POST":
-#         return HttpResponse("Invalid Method!")
-#     else:
-#         student_id = request.session.get('student_id')
-#         if student_id == None:
-#             return redirect('/manage_student')
-
-#         form = EditStudentForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             email = form.cleaned_data['email']
-#             username = form.cleaned_data['username']
-#             first_name = form.cleaned_data['first_name']
-#             last_name = form.cleaned_data['last_name']
-#             address = form.cleaned_data['address']
-#             group_id = form.cleaned_data['group_id']
-#             # group = StudentGroups.objects.get(id=group_id)
-#             gender = form.cleaned_data['gender']
-            
-
-#             # Getting Profile Pic first
-#             # First Check whether the file is selected or not
-#             # Upload only if file is selected
-#             if len(request.FILES) != 0:
-#                 profile_pic = request.FILES['profile_pic']
-#                 fs = FileSystemStorage()
-#                 filename = fs.save(profile_pic.name, profile_pic)
-#                 profile_pic_url = fs.url(filename)
-#             else:
-#                 profile_pic_url = None
-
-#             try:
-#                 # First Update into Custom User Model
-#                 user = CustomUser.objects.get(id=student_id)
-#                 user.first_name = first_name
-#                 user.last_name = last_name
-#                 user.email = email
-#                 user.username = username
-#                 user.save()
-
-#                 # Then Update Students Table
-#                 student_model = Students.objects.get(admin=student_id)
-#                 student_model.address = address
-
-#                 group = StudentGroups.objects.get(id=id)
-#                 student_model.group_id = group
-#                 student_model.gender = gender
-#                 if profile_pic_url != None:
-#                     student_model.profile_pic = profile_pic_url
-#                 student_model.save()
-#                 # Delete student_id SESSION after the data is updated
-#                 del request.session['student_id']
-
-#                 messages.success(request, "Student Updated Successfully!")
-#                 return redirect('/manage_student/')
-#             except:
-#                 messages.success(request, "Failed to Update Student.")
-#                 return redirect('/edit_student/'+student_id)
-#         else:
-#             return redirect('/edit_student/'+student_id)
-
-
-# def delete_student(request, student_id):
-#     student = Students.objects.get(admin=student_id)
-#     try:
-#         student.delete()
-#         messages.success(request, "Student Deleted Successfully.")
-#         return redirect('manage_student')
-#     except:
-#         messages.error(request, "Failed to Delete Student.")
-#         return redirect('manage_student')
-
-
-
+def manage_project(request):
+    proposals = Proposals.objects.all()
+    context = {
+        "proposals": proposals
+    }
+    return render(request, 'hod_template/manage_project_template.html', context)
 
 @csrf_exempt
 def check_email_exist(request):
@@ -609,7 +510,7 @@ def check_email_exist(request):
         return HttpResponse(True)
     else:
         return HttpResponse(False)
-
+manage_project
 
 @csrf_exempt
 def check_username_exist(request):
@@ -620,131 +521,82 @@ def check_username_exist(request):
     else:
         return HttpResponse(False)
 
-def supervisor_feedback_message(request):
-    hod_obj = AdminHOD.objects.get(admin=request.user.id)
-    feedback_data = FeedBackSupervisor.objects.all()
-    # print(feedback_data)
-    for data in feedback_data:
-        feedback = data.supervisor_id.admin.first_name
-        sender_id = data.supervisor_id.id
-        print(feedback, sender_id)
+def hod_group_feedback_message(request):
+    feedback_data = FeedBackGroup.objects.all()
+    
+    groups = StudentGroups.objects.all()
+
     context = {
         "feedback_data":feedback_data,
-        "sender": feedback,
-        "id": sender_id
+        "groups": groups
+    }
+    return render(request, "hod_template/group_feedback_template.html", context)
+
+def supervisor_feedback_message(request):
+    feedback_data = FeedBackSupervisor.objects.all()
+    
+    print(feedback_data)
+
+    context = {
+        "feedback_data":feedback_data,
     }
     return render(request, "hod_template/supervisor_feedback_template.html", context)
 
 
 @csrf_exempt
 def supervisor_feedback_message_reply(request):
-    feedback_id = request.POST.get('to')
-    feedback_reply = request.POST.get('feedback_message')
+    feedback_id = request.POST.get('id')
+    feedback_reply = request.POST.get('reply')
+    hod = AdminHOD.objects.get()
+    try:
+        feedback = FeedBackGroup.objects.get(id=feedback_id)
+        feedback.feedback_reply = feedback_reply
+        feedback.hod = hod
+        feedback.save()
+        
+        return HttpResponse("True")
 
-    # try:
-    feedback = FeedBackSupervisor.objects.get(id=feedback_id)
-    feedback.feedback_reply = feedback_reply
-    feedback.save()
-    messages.success(request, "Replied Successfully.")
-    return redirect('supervisor_feedback_message')
-
-    # except:
-    #     return HttpResponse("False")
-
-
-# def student_leave_view(request):
-#     leaves = LeaveReportStudent.objects.all()
-#     context = {
-#         "leaves": leaves
-#     }
-#     return render(request, 'hod_template/student_leave_view.html', context)
-
-# def student_leave_approve(request, leave_id):
-#     leave = LeaveReportStudent.objects.get(id=leave_id)
-#     leave.leave_status = 1
-#     leave.save()
-#     return redirect('student_leave_view')
+    except:
+        return HttpResponse("False")
 
 
-# def student_leave_reject(request, leave_id):
-#     leave = LeaveReportStudent.objects.get(id=leave_id)
-#     leave.leave_status = 2
-#     leave.save()
-#     return redirect('student_leave_view')
+def hod_feedback_message(request):
+    hod_obj = AdminHOD.objects.get(admin=request.user.id)
+    # feedback_data = FeedBackHOD.objects.filter(hod=hod_obj)
 
+    if request.method != "POST":
+        messages.error(request, "Invalid Method.")
+        return redirect('supervisor_feedback_message')
+    else:
+        feedback = request.POST.get('feedback_message')
+        to = request.POST.get('to')
+        too = StudentGroups.objects.get(id = to)
 
-# def staff_leave_view(request):
-#     leaves = LeaveReportStaff.objects.all()
-#     context = {
-#         "leaves": leaves
-#     }
-#     return render(request, 'hod_template/staff_leave_view.html', context)
+        print(to)
 
+        # try:
+        add_feedback = FeedBackGroup(hod=hod_obj, feedback="", feedback_reply=feedback, group = too)
+        add_feedback.save()
+        messages.success(request, "Message Sent.")
+        return redirect('hod_group_feedback_message')
+        # except:
+        #     messages.error(request, "Failed to Send Feedback.")
+        #     return redirect('hod_group_feedback_message')
 
-# def staff_leave_approve(request, leave_id):
-#     leave = LeaveReportStaff.objects.get(id=leave_id)
-#     leave.leave_status = 1
-#     leave.save()
-#     return redirect('staff_leave_view')
+@csrf_exempt
+def proposal_accept(request):
+    proposal_id = request.POST.get('id')
+    # feedback_reply = request.POST.get('reply')
+    hod = AdminHOD.objects.get()
+    try:
+        proposal = Proposals.objects.get(id=proposal_id)
+        proposal.status = proposal_id
+        proposal.save()
+        
+        return HttpResponse("True")
 
-
-# def staff_leave_reject(request, leave_id):
-#     leave = LeaveReportStaff.objects.get(id=leave_id)
-#     leave.leave_status = 2
-#     leave.save()
-#     return redirect('staff_leave_view')
-
-
-# def admin_view_attendance(request):
-#     subjects = Subjects.objects.all()
-#     session_years = SessionYearModel.objects.all()
-#     context = {
-#         "subjects": subjects,
-#         "session_years": session_years
-#     }
-#     return render(request, "hod_template/admin_view_attendance.html", context)
-
-
-# @csrf_exempt
-# def admin_get_attendance_dates(request):
-#     # Getting Values from Ajax POST 'Fetch Student'
-#     subject_id = request.POST.get("subject")
-#     session_year = request.POST.get("session_year_id")
-
-#     # Students enroll to Course, Course has Subjects
-#     # Getting all data from subject model based on subject_id
-#     subject_model = Subjects.objects.get(id=subject_id)
-
-#     session_model = SessionYearModel.objects.get(id=session_year)
-
-#     # students = Students.objects.filter(course_id=subject_model.course_id, session_year_id=session_model)
-#     attendance = Attendance.objects.filter(subject_id=subject_model, session_year_id=session_model)
-
-#     # Only Passing Student Id and Student Name Only
-#     list_data = []
-
-#     for attendance_single in attendance:
-#         data_small={"id":attendance_single.id, "attendance_date":str(attendance_single.attendance_date), "session_year_id":attendance_single.session_year_id.id}
-#         list_data.append(data_small)
-
-#     return JsonResponse(json.dumps(list_data), content_type="application/json", safe=False)
-
-
-# @csrf_exempt
-# def admin_get_attendance_student(request):
-#     # Getting Values from Ajax POST 'Fetch Student'
-#     attendance_date = request.POST.get('attendance_date')
-#     attendance = Attendance.objects.get(id=attendance_date)
-
-#     attendance_data = AttendanceReport.objects.filter(attendance_id=attendance)
-#     # Only Passing Student Id and Student Name Only
-#     list_data = []
-
-#     for student in attendance_data:
-#         data_small={"id":student.student_id.admin.id, "name":student.student_id.admin.first_name+" "+student.student_id.admin.last_name, "status":student.status}
-#         list_data.append(data_small)
-
-#     return JsonResponse(json.dumps(list_data), content_type="application/json", safe=False)
+    except:
+        return HttpResponse("False")
 
 
 def admin_profile(request):
