@@ -43,6 +43,7 @@ urlpatterns = [
     # path('edit_student/<student_id>', HodViews.edit_student, name="edit_student"),
     # path('edit_student_save/', HodViews.edit_student_save, name="edit_student_save"),
     path('manage_student/', HodViews.manage_student, name="manage_student"),
+    path('manage_project/', HodViews.manage_project, name="manage_project"),
     # path('delete_student/<student_id>/', HodViews.delete_student, name="delete_student"),
     
     path('check_email_exist/', HodViews.check_email_exist, name="check_email_exist"),
@@ -53,9 +54,14 @@ urlpatterns = [
 
     path('supervisor_feedback_message/', HodViews.supervisor_feedback_message, name="supervisor_feedback_message"),
     path('supervisor_feedback_message_reply/', HodViews.supervisor_feedback_message_reply, name="supervisor_feedback_message_reply"),
+
+    path('hod_feedback_message/', HodViews.hod_feedback_message, name="hod_feedback_message"),
+    path('hod_group_feedback_message/', HodViews.hod_group_feedback_message, name="hod_group_feedback_message"),
+
     path('admin_profile/', HodViews.admin_profile, name="admin_profile"),
     path('admin_profile_update/', HodViews.admin_profile_update, name="admin_profile_update"),
     
+    path('proposal_accept/', HodViews.proposal_accept, name="proposal_accept"),
 
 
     # # URLS for Staff
@@ -92,6 +98,8 @@ urlpatterns = [
     # path('student_apply_leave/', StudentViews.student_apply_leave, name="student_apply_leave"),
     # path('student_apply_leave_save/', StudentViews.student_apply_leave_save, name="student_apply_leave_save"),
     path('group_feedback/', GroupViews.group_feedback, name="group_feedback"),
+    path('group_hod_feedback/', GroupViews.group_hod_feedback, name="group_hod_feedback"),
+    path('group_hod_feedback_save/', GroupViews.group_hod_feedback_save, name="group_hod_feedback_save"),
     path('group_feedback_save/', GroupViews.group_feedback_save, name="group_feedback_save"),
 
     # path('student_view_result/', StudentViews.student_view_result, name="student_view_result"),

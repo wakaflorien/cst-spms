@@ -5,7 +5,7 @@ from django.core.files.storage import FileSystemStorage #To upload Profile Pictu
 from django.urls import reverse
 import datetime # To Parse input DateTime into Python Date Time Object
 
-from CST_SPMS.models import CustomUser, StudentGroups,  Students, Proposals, Projects,FeedBackGroup
+from CST_SPMS.models import AdminHOD, CustomUser, StudentGroups,  Students, Proposals, Projects,FeedBackGroup, Supervisors
 
 
 def group_home(request):
@@ -216,13 +216,12 @@ def manage_proposal(request):
         "proposals": proposals,
         
     }
-    print(proposals)
+    # print(proposals)
     return render(request, 'group_template/manage_proposal_template.html', context)
 
 
 def edit_proposal(request, proposal_id):
     proposal = Proposals.objects.get(id=proposal_id)
-    proposals = Proposals.objects.all()
     groups = CustomUser.objects.filter(user_type='3')
     context = {
         "proposal": proposal,
@@ -236,36 +235,34 @@ def edit_proposal_save(request):
     if request.method != "POST":
         HttpResponse("Invalid Method.")
     else:
+        id = request.POST.get('id')
         proposal_title = request.POST.get('proposal')
         promotion = request.POST.get('promotion')
         abstract = request.POST.get('abstract')
-        group = StudentGroups.objects.get(id=request.user.id)
+        group = StudentGroups.objects.get(admin=request.user.id)
 
-        try:
-            proposal = Proposals.objects.get(id=id)
-            proposal.proposal_title = proposal_title
+        # try:
+        proposal = Proposals.objects.get(studentgroup_id=group)
 
-            proposal = Proposals.objects.get(id=id)
-            proposal.proposal_id = proposal
+        proposal.proposal_title = proposal_title
+        proposal.promotion = promotion
+        proposal.abstract = abstract
+        proposal.studentgroup_id = group
+        proposal.save()
 
-            group = CustomUser.objects.get(studentgroup_id=group)
-            proposal.group = group
-            
-            proposal.save()
+        messages.success(request, "proposal Updated Successfully.")
+        return redirect('/manage_proposal/')
+            # return HttpResponseRedirect(reverse("edit_proposal", kwargs={"proposal_id":id}))
 
-            messages.success(request, "proposal Updated Successfully.")
-            # return redirect('/edit_proposal/'+proposal_id)
-            return HttpResponseRedirect(reverse("edit_proposal", kwargs={"proposal_id":proposal_id}))
-
-        except:
-            messages.error(request, "Failed to Update proposal.")
-            return HttpResponseRedirect(reverse("edit_proposal", kwargs={"proposal_id":proposal_id}))
-            # return redirect('/edit_proposal/'+proposal_id)
+        # except:
+        #     messages.error(request, "Failed to Update proposal.")
+        #     # return HttpResponseRedirect(reverse("edit_proposal", kwargs={"proposal_id":id}))
+        #     return redirect('/manage_proposal/')
 
 
 
 def delete_proposal(request, proposal_id):
-    proposal = proposals.objects.get(id=proposal_id)
+    proposal = Proposals.objects.get(id=proposal_id)
     try:
         proposal.delete()
         messages.success(request, "proposal Deleted Successfully.")
@@ -277,30 +274,67 @@ def delete_proposal(request, proposal_id):
 
 def group_feedback(request):
     group_obj = StudentGroups.objects.get(admin=request.user.id)
-    feedback_data = FeedBackGroup.objects.filter(studentgroup_id=group_obj)
+    feedback_data = FeedBackGroup.objects.filter(group=group_obj, supervisor=True)
+
+    supervisor = Supervisors.objects.get(group = group_obj)
+
+    # print(supervisor.id)
+
     context = {
-        "feedback_data": feedback_data
+        "feedback_data": feedback_data,
+        "supervisor": supervisor
     }
     return render(request, 'group_template/group_contact_supervisor.html', context)
-
 
 def group_feedback_save(request):
     if request.method != "POST":
         messages.error(request, "Invalid Method.")
         return redirect('group_feedback')
     else:
+        # supervisor = request.POST.get('sup')
+        # print(supervisor)
+
         feedback = request.POST.get('feedback_message')
         group_obj = StudentGroups.objects.get(admin=request.user.id)
+        supervisor = Supervisors.objects.get(group = group_obj)
+
+        # try:
+        add_feedback = FeedBackGroup(group=group_obj, feedback=feedback, feedback_reply="", supervisor=supervisor)
+        add_feedback.save()
+        messages.success(request, "Feedback Sent.")
+        return redirect('group_feedback')
+        # except:
+        #     messages.error(request, "Failed to Send Feedback.")
+        #     return redirect('group_feedback')
+
+
+def group_hod_feedback(request):
+    group_obj = StudentGroups.objects.get(admin=request.user.id)
+    feedback_data = FeedBackGroup.objects.filter(group=group_obj, hod = True)
+
+    context = {
+        "feedback_data": feedback_data
+    }
+    return render(request, 'group_template/group_contact_hod.html', context)
+
+def group_hod_feedback_save(request):
+    if request.method != "POST":
+        messages.error(request, "Invalid Method.")
+        return redirect('group_feedback')
+    else:
+        feedback = request.POST.get('feedback_message')
+        group_obj = StudentGroups.objects.get(admin=request.user.id)
+        hod = AdminHOD.objects.get()
+        print(hod)
 
         try:
-            add_feedback = FeedBackGroup(studentgroup_id=group_obj, feedback=feedback, feedback_reply="")
+            add_feedback = FeedBackGroup(group=group_obj, feedback=feedback, feedback_reply="", hod = hod)
             add_feedback.save()
             messages.success(request, "Feedback Sent.")
-            return redirect('group_feedback')
+            return redirect('group_hod_feedback')
         except:
             messages.error(request, "Failed to Send Feedback.")
             return redirect('group_feedback')
-
 
 # def group_contact_hod(request):
 #     return render(request, "group_template/group_contact_hod.html")

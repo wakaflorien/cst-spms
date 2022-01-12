@@ -1,7 +1,7 @@
 {% extends 'hod_template/base_template.html' %}
 
 {% block page_title %}
-    Feedback Message with Supervisors
+    Feedback Message with Group
 {% endblock page_title %}
 
 {% block main_content %}
@@ -32,7 +32,7 @@
                                     
                                     <tr>
                                         <td>{{ row.id }}</td>
-                                        <td>{{ row.feedback }} <br><span class="text-primary">Sent by: {{ row.supervisor_id.admin.first_name }}</span></td>
+                                        <td>{{ row.feedback }} <br><span class="text-primary">Sent by: {{ row.group.group_name }}</span></td>
                                         <td>
                                             {% if row.feedback_reply == "" %}
                                             <button class="btn btn-success reply_open_modal" data-toggle="modal" data-target="#replyModal">Reply</button>
@@ -86,14 +86,14 @@
                     <form method="POST" action="{% url 'hod_feedback_message' %}">
                         {% csrf_token %}
                         <div class="card-body">
-                           <!-- <div class="form-group">
+                           <div class="form-group">
                                <label>To:</label>
                                <select name="to" class="form-control">
-                                   {% for row in feedback_data %}
-                                   <option value="{{ id }}">{{ sender.last_name }}</option>
+                                   {% for group in groups %}
+                                   <option value="{{ group.id }}">{{ group.group_name }}</option>
                                    {% endfor %}
                                </select>
-                           </div> -->
+                           </div>
                             <div class="form-group">
                                 <label>Feedback Message </label>
                                 <textarea name="feedback_message" class="form-control" rows="6" placeholder="Feedback Message"></textarea>

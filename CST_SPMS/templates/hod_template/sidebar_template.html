@@ -79,13 +79,13 @@
               <a href="{{ manage_project }}" class="nav-link {% if request.path == manage_project %} active {% endif %} {% if request.path == edit_project %} active {% endif %}">
                 <i class="nav-icon fas fa-book"></i>
                 <p>
-                  Manage Projects
+                  Manage Proposals
                 </p>
               </a>
             </li>
 
 
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               {% url 'manage_session' as manage_session %}
               {% url 'edit_session' session_id=id as edit_session %}
               <a href="{{ manage_session }}" class="nav-link {% if request.path == manage_session %} active {% endif %} {% if request.path == edit_session %} active {% endif %}">
@@ -94,11 +94,11 @@
                   Manage Promotion Year 
                 </p>
               </a>
-            </li>
+            </li> -->
 
             <li class="nav-item">
-              {% url 'group_feedback_message' as group_feedback_message %}
-              <a href="{{ group_feedback_message }}" class="nav-link {% if request.path == group_feedback_message %} active {% endif %}">
+              {% url 'hod_group_feedback_message' as hod_group_feedback_message %}
+              <a href="{{ hod_group_feedback_message }}" class="nav-link {% if request.path == hod_group_feedback_message %} active {% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>
                   Group Feedback
