@@ -61,14 +61,15 @@ urlpatterns = [
     path('admin_profile/', HodViews.admin_profile, name="admin_profile"),
     path('admin_profile_update/', HodViews.admin_profile_update, name="admin_profile_update"),
     
-    path('proposal_accept/', HodViews.proposal_accept, name="proposal_accept"),
+    path('proposal_accept/', HodViews.proposal_accept, name="proposal_accept"), 
+    path('proposal_deny/', HodViews.proposal_deny, name="proposal_deny"),
 
+    path('supervisor_assign/', HodViews.supervisor_assign, name="supervisor_assign"),
 
     # # URLS for Staff
     path('supervisor_home/', SupervisorViews.supervisor_home, name="supervisor_home"),
     path('supervisor_manage_proposal/', SupervisorViews.supervisor_manage_proposal, name="supervisor_manage_proposal"),
-    path('supervisor_assigned_group/', SupervisorViews.supervisor_assigned_group, name="supervisor_assigned_group"),
-    path('supervisor_assigned_group/<group_id>', SupervisorViews.supervisor_assigned_ngroup, name="supervisor_assigned_ngroup"),
+    
     # path('supervisor_contact_group/', SupervisorViews.supervisor_contact_group, name="supervisor_contact_group"),
     # path('supervisor_contact_hod/', SupervisorViews.supervisor_contact_hod, name="supervisor_contact_hod"),
     path('supervisor_feedback/', SupervisorViews.supervisor_feedback, name="supervisor_feedback"),

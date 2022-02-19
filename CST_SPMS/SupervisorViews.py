@@ -20,7 +20,7 @@ def supervisor_home(request):
     for sup in supervisors:
         # print(group.group.id)
         for group in studentgroups:
-            groups = StudentGroups.objects.filter(id = sup.group.id)
+            groups = StudentGroups.objects.filter(id = sup.id)
             groups_count = groups.count()
     # students_count = Students.objects.all().count()
 
@@ -32,42 +32,27 @@ def supervisor_home(request):
     return render(request, "supervisor_template/supervisor_home_template.html", context)
 
 def supervisor_manage_proposal(request):
-    proposas = Proposals.objects.all()
-    print(proposas)
+    supervisor = Supervisors.objects.get(admin= request.user.id)
+
+    supservised_groups = StudentGroups.objects.filter(supervisor = supervisor)
+
+    proposal_list = []
+    for super in supservised_groups:
+        
+        proposas = Proposals.objects.filter(studentgroup_id = super.id)
+
+        if proposas:
+            prop_no = Proposals.objects.filter(studentgroup_id = super.id).count()
+            for i in range(prop_no):
+                one=proposas[i]
+                proposal_list.append(one)
+
+    print(proposal_list)
     context = {
-        "proposals": proposas
+        "proposals": proposal_list
     }
     return render(request, "supervisor_template/supervisor_manage_proposal.html", context)
 
-def supervisor_assigned_group(request):
-    supervisor = Supervisors.objects.get(admin=request.user.id)
-    print(supervisor.admin.id)
-    all_groups = StudentGroups.objects.filter()
-    supervisors = Supervisors.objects.all()
-
-
-    for sup in supervisors:
-        # print(group.group.id, and sup.admin.id == supervisor.admin.id)
-        for group in all_groups:
-            # print(sup.admin.id, "hey")
-            groups = StudentGroups.objects.filter(id = sup.group.id)
-   
-    print(groups)
-    context = {
-        "groups": groups
-    }
-    return render(request, "supervisor_template/supervisor_assigned_group.html", context)
-
-def supervisor_assigned_ngroup(request, group_id):
-    
-    groups = StudentGroups.objects.filter(id = group_id)
-   
-    print(groups)
-    context = {
-        "groups": groups,
-        "id": group_id
-    }
-    return render(request, "supervisor_template/supervisor_assigned_ngroup.html", context)
 def group_feedback_message(request):
     feedbacks = FeedBackGroup.objects.all()
     context = {

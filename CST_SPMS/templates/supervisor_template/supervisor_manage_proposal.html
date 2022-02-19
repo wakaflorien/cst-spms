@@ -10,8 +10,6 @@
 
 <section class="content">
         <div class="container-fluid">
-
-            <a style="background-color:#1B4254; color: #C4C4C4; font-weight:bold"class="btn" href="{% url 'add_group' %}" role="button">+ Add group</a>&nbsp;
             
             <a class="btn btn-warning" href="{% url 'export_csv' %}" role="button"style="margin-left:500px;color:white;">+ Export CSV</a>&nbsp;
             <a class="btn btn-success" href="{% url 'export_pdf' %}" role="button"style="margin-left:300px;color:white;">+ Export Pdf</a> <br/>&nbsp;
@@ -71,16 +69,15 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <!-- {{proposals}} -->
                                 {% for prop in proposals %}
                                 <tr>
                                 <td>{{ prop.id }}</td>
-                                <td>{{ prop.group_name }}</td>
+                                <td>{{ prop.studentgroup_id.group_name }}</td>
+                                <td>{{ prop.proposal_title }}</td>
                                 <td>{{ prop.created_at }}</td>
                                 <td>{{ prop.updated_at }}</td>
-                                <td>
-                                    <a href="{% url 'edit_group' group.id %}" class="btn btn-success">Edit</a> 
-                                    <a href="{% url 'delete_group' group.id %}" class="btn btn-danger">Delete</a>
-                                </td>
+                                <td><button type="button" class="btn btn-info fas fa-eye" data-toggle="modal" data-target="#viewModal" >View</button></td>
                                 </tr>
                                 {% endfor %}
                                 
@@ -96,5 +93,31 @@
 
         </div><!-- /.container-fluid -->
       </section>
+
+      {% comment %} Modal to Reply Feedback {% endcomment %}
+      
+  <!-- Modal -->
+    <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">View Proposal</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            {% for prop in proposals %}
+            <h3 class="text-success" id="title">Title: </h3><h4 class="text-black">{{ prop.proposal_title }}</h4>
+            <h4 class="text-success">Abstract: </h4><p class="text-black">{{ prop.abstract }}</p>
+            <p id="abstract"></p>
+            {% endfor %}
+        </div>
+        <div class="modal-footer">
+            {% comment %} <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> {% endcomment %}
+        </div>
+        </div>
+    </div>
+    </div>
 
   {% endblock main_content %}

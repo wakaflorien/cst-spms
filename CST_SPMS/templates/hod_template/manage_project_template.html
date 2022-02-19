@@ -65,32 +65,42 @@
                                 <th>Abstract</th>
                                 <th>Group Name</th>
                                 <th>Members</th>
-                                <th>Last Login</th>
+                                <!-- <th>Last Login</th> -->
                                 <th>Date Created</th>
-                                <th>Action</th>
+                                <!-- <th>Action</th> -->
                                 </tr>
                             </thead>
                             <tbody>
+                                <!-- {{ members }} -->
                                 {% for proposal in proposals %}
+                                {% for member in members %}
                                 <tr>
                                 <td>{{ proposal.id }}</td>
                                 <td>{{ proposal.proposal_title }}</td>
                                 <td>{{ proposal.abstract }}</td>
                                 <td>{{ proposal.studentgroup_id.group_name }}</td>
-                                <td>{{ proposal.id }}</td>
-                                <td>{{ proposal.studentgroup_id.admin.last_login  }}</td>
-                                <td>{{ proposal.studentgroup_id.created_at  }}</td>
-                                <!-- <td> <img src="{{ student.profile_pic }}" style="width: 100px;" /> </td> -->
-                                
-                                <td>{{ student.group.group_name }}</td>
-                                <td>{{ student.admin.last_login }}</td>
-                                <td>{{ student.admin.date_joined }}</td>
+                                <td>{{ member }}, </td>
+                                <td>{{ proposal.studentgroup_id.created_at  }} </td>
                                 <td>
                                     <a href="" class="btn btn-info view_open_modal" data-toggle="modal" data-target="#viewModal"><i class="fas fa-eye"></i> View</a> 
-                                    <a href="" class="btn btn-success"><i class="far fa-check-circle"></i> Approve</a> 
-                                    <a href="" class="btn btn-danger"><i class="fas fa-trash"></i> Deny</a>
+                                    {% if proposal.status == "" %}
+                                    <button type="button" id="accept_button" class="btn btn-success"><i class="far fa-check-circle"></i> Approve</button> 
+                                    <button type="button" id="deny_button" class="btn btn-danger"><i class="fas fa-trash"></i> Deny</button>
+
+                                    {% elif proposal.studentgroup_id.supervisor != null %}
+
+                                    <button type="button" class="btn btn-success" disabled><i class="far fa-check-circle"></i> Approved</button> 
+                                    <button type="button"  value="{{ proposal.studentgroup_id.id }}" class="btn btn-secondary" disabled><i class="fas fa-plus-circle"></i> Assigned </button>
+                                    <button type="button" class="btn btn-danger" disabled><i class="fas fa-trash"></i> Deny</button>
+
+                                    {% else %}
+                                    <button type="button" class="btn btn-success" disabled><i class="far fa-check-circle"></i> Approved</button> 
+                                    <button type="button" data-toggle="modal" data-target="#viewAssignModal" id="assign" value="{{ proposal.studentgroup_id.id }}" class="btn btn-secondary view_assign_modal"><i class="fas fa-plus-circle"></i> Assign </button>
+                                    <button type="button" class="btn btn-danger" disabled><i class="fas fa-trash"></i> Deny</button>
+                                    {% endif %}
                                 </td>
                                 </tr>
+                                {% endfor %}
                                 {% endfor %}
                                 
                             </tbody>
@@ -107,9 +117,10 @@
       </section>
 
       {% comment %} Modal to Reply Feedback {% endcomment %}
+      
   <!-- Modal -->
     <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">View Proposal</h5>
@@ -120,39 +131,117 @@
         <div class="modal-body">
             <h3 class="text-primary" id="title"></h3>
             <h4 class="text-secondary">Abstract</h4>
-            <p><b><span id="reply_name"></span></b></p>
-            <input type="hidden" id="reply_id" name="reply_id" />
+            <p id="abstract"></p>
+            <input type="hidden" id="proposal_id" name="proposal_id" />
             <!-- <textarea class="form-control" rows="5" id="reply_message"></textarea> -->
         </div>
         <div class="modal-footer">
             {% comment %} <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> {% endcomment %}
+
+            {% for proposal in proposals %}
+            {% if proposal.status == "" %}
             <button type="button" class="btn btn-success" id="accept_button"><i class="far fa-check-circle"></i> Approve</button> 
             <button type="button" class="btn btn-danger" id="deny_button"><i class="fas fa-trash"></i> Deny</button>
-            <!-- <button type="button" class="btn btn-primary btn-block" id="reply_button">Reply</button> -->
+            {% else %}
+            <button type="button" class="btn btn-success" id="accept_button" disabled><i class="far fa-check-circle"></i> Approve</button> 
+            <button type="button" class="btn btn-danger" id="deny_button" disabled><i class="fas fa-trash"></i> Deny</button>
+            {% endif%}
+            {% endfor %}
         </div>
         </div>
     </div>
     </div>
+
+    <!-- Assign Modal -->
+    <div class="modal fade" id="viewAssignModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title text-secondary" id="exampleModalLabel">Assign Supervisor</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-hover text-nowrap">
+                    <thead>
+                        <tr>
+                        <th>ID</th>
+                        <th>Firstname</th>
+                        <th>LastName</th>
+                        <th>Area of Specialization</th>
+                        <th>Groups</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for supervisor in supervisors %}
+                        {% if groups < 4 %}
+                        <tr>
+                        <td>{{ supervisor.id }}</td>
+                        <td>{{ supervisor.admin.first_name }}</td>
+                        <td>{{ supervisor.admin.last_name }}</td>
+                        <td>{{ supervisor.specialization }}</td>
+                        <td>{{ group }}</td>
+                        <td>
+                            <!-- {% if proposal.status == "" %} -->
+                            <!-- <button type="button" id="assign_button" class="btn btn-success fas fa-plus-circle"><i class="far fa-check-circle"></i> Choose</a>  -->
+                            <!-- {% else %} -->
+                            <button type="button" id="assign_button" value="{{ supervisor.id }}" class="btn btn-success fas fa-plus-circle"><i class="far fa-check-circle"></i> Choose</a>
+                            <!-- {% endif %} -->
+                        </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                        
+                    </tbody>
+                    </table>
+                </div>
+                <input type="hidden" id="supervisor_id" name="supervisor_id" />
+            </div>
+            <div class="modal-footer">
+                {% comment %} <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> {% endcomment %}
+            </div>
+            </div>
+        </div>
+        </div>
 
 {% endblock main_content %}
 
 {% comment %} Custom JS to Identify the Reply and Post Reply {% endcomment %}\
 
-<!-- {% block custom_js %}
+{% block custom_js %}
 <script>
     $(document).ready(function(){
         $(".view_open_modal").click(function(){
             // Getting Value from Table
             var id = $(this).parents("tr").children("td:eq(0)").text(); //Getting Selected Row ID (Frist Column)
             var title = $(this).parents("tr").children("td:eq(1)").text(); //Getting Selected Row ID (Frist Column)
-            var name = $(this).parents("tr").children("td:eq(2)").text(); //Getting Selected Name (3rd Column)
+            var abstract = $(this).parents("tr").children("td:eq(2)").text(); //Getting Selected Name (3rd Column)
             
             // Adding the Value from Table to Modal form
-            $("#reply_id").val(id);
+            $("#proposal_id").val(id);
             $("#title").text(title);
-            $("#reply_name").text(name);
+            $("#abstract").text(abstract);
         });
 
+        $(".view_assign_modal").click(function(){
+
+            var id1 = $("#assign").val()
+
+            // alert(id1)
+
+            // Getting Value from Table
+            // var id = $(this).parents("tr").children("td:eq(0)").text(); //Getting Selected Row ID (Frist Column)
+
+            // alert(id)
+            
+            // Adding the Value from Table to Modal form
+            var id2 = $("#assign_button").val();
+            // alert('gerageza',id2)
+            // alert(id1)
+            // alert(id2)
+        });
         $(document).on("click", "#accept_button", function(){
             //Disabling the Button while data is being saved in Server
             $(this).attr("disabled", "disabled")
@@ -161,14 +250,14 @@
             //console.log("SAVE")
             
 
-            var id=$("#reply_id").val();
+            var id=$("#proposal_id").val();
             // var reply=$("#reply_message").val();
-            //console.log(student_data);
+            console.log(id);
 
             // Saving Attendance Data into Database
 
             $.ajax({
-                url:'{% url 'supervisor_feedback_message_reply' %}',
+                url:'{% url 'proposal_accept' %}',
                 type:'POST',
                 data:{id:id},
             })
@@ -178,11 +267,11 @@
                 
                 if(response=="True")
                 {
-                    alert("Reply Sent!")
+                    alert("Proposal Accepted!")
                 }
                 else
                 {
-                    alert("Failed to Send Reply!")
+                    alert("Failed!")
                 }
                 location.reload()
                 
@@ -190,11 +279,99 @@
             })
 
             .fail(function(){
-                alert("Error in Sending Feedback Reply.")
+                alert("Error in Accepting Proposal Reply.")
             })
 
         })
 
-    })
+        $(document).on("click", "#deny_button", function(){
+            //Disabling the Button while data is being saved in Server
+            $(this).attr("disabled", "disabled")
+            $(this).text("Processing Action...")
+
+            //console.log("SAVE")
+            
+
+            var id=$("#proposal_id").val();
+            // var reply=$("#reply_message").val();
+            console.log(id);
+
+            // Saving Attendance Data into Database
+
+            $.ajax({
+                url:'{% url 'proposal_deny' %}',
+                type:'POST',
+                data:{id:id},
+            })
+
+            
+            .done(function(response){
+                
+                if(response=="True")
+                {
+                    alert("Proposal Denied!")
+                }
+                else
+                {
+                    alert("Failed !")
+                }
+                location.reload()
+                
+                //console.log(response)
+            })
+
+            .fail(function(){
+                alert("Error in Sending Deny Reply.")
+            })
+
+        })
+
+        $(document).on("click", "#assign_button", function(){
+            //Disabling the Button while data is being saved in Server
+            $(this).attr("disabled", "disabled")
+            $(this).text("Processing Action...")
+
+            //console.log("SAVE")
+            
+
+            // var id=$("#supervisor_id").val();
+            // var proposal_id=$("#proposal_id").val();
+            var id1 = $("#assign").val()
+            var id2 = $("#assign_button").val();
+
+            // alert(id1)
+            // alert(id2)
+
+            // Saving Attendance Data into Database
+
+            $.ajax({
+                url:'{% url 'supervisor_assign' %}',
+                type:'POST',
+                data:{id1:id1, id2:id2},
+            })
+
+            
+            .done(function(response){
+                
+                if(response=="True")
+                {
+                    alert("Supervisor Assigned!")
+                }
+                else
+                {
+                    alert("Failed !")
+                }
+                location.reload()
+                
+                //console.log(response)
+            })
+
+            .fail(function(){
+                alert("Error in Sending Deny Reply.")
+            })
+
+        })
+
+    });
 </script>
-{% endblock custom_js %} -->
+{% endblock custom_js %}
