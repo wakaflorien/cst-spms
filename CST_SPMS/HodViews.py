@@ -120,12 +120,12 @@ def add_supervisor_save(request):
         spec = request.POST.get('spec')
         profile = request.POST.get('profile_pic')
         group_id = request.POST.get('group')
-        group = StudentGroups.objects.get(id=group_id)
+        # group = StudentGroups.objects.get(id=group_id)
        
         # try:
         user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=2)
         # admin = user.id
-        supervisor = Supervisors(specialization=spec, degree=degree, address=address, gender=gender, profile_pic=profile, group=group, admin=user)
+        supervisor = Supervisors(specialization=spec, degree=degree, address=address, gender=gender, profile_pic=profile, admin=user)
         supervisor.save()
         user.save()
         messages.success(request, "supervisor Added Successfully!")
@@ -378,77 +378,6 @@ def export_pdf(request):
 
     return response
 
-# def manage_session(request):
-#     session_years = SessionYearModel.objects.all()
-#     context = {
-#         "session_years": session_years
-#     }
-#     return render(request, "hod_template/manage_session_template.html", context)
-
-
-# def add_session(request):
-#     return render(request, "hod_template/add_session_template.html")
-
-
-# def add_session_save(request):
-#     if request.method != "POST":
-#         messages.error(request, "Invalid Method")
-#         return redirect('add_group')
-#     else:
-#         session_start_year = request.POST.get('session_start_year')
-#         session_end_year = request.POST.get('session_end_year')
-
-#         try:
-#             sessionyear = SessionYearModel(session_start_year=session_start_year, session_end_year=session_end_year)
-#             sessionyear.save()
-#             messages.success(request, "Session Year added Successfully!")
-#             return redirect("add_session")
-#         except:
-#             messages.error(request, "Failed to Add Session Year")
-#             return redirect("add_session")
-
-
-# def edit_session(request, session_id):
-#     session_year = SessionYearModel.objects.get(id=session_id)
-#     context = {
-#         "session_year": session_year
-#     }
-#     return render(request, "hod_template/edit_session_template.html", context)
-
-
-# def edit_session_save(request):
-#     if request.method != "POST":
-#         messages.error(request, "Invalid Method!")
-#         return redirect('manage_session')
-#     else:
-#         session_id = request.POST.get('session_id')
-#         session_start_year = request.POST.get('session_start_year')
-#         session_end_year = request.POST.get('session_end_year')
-
-#         try:
-#             session_year = SessionYearModel.objects.get(id=session_id)
-#             session_year.session_start_year = session_start_year
-#             session_year.session_end_year = session_end_year
-#             session_year.save()
-
-#             messages.success(request, "Session Year Updated Successfully.")
-#             return redirect('/edit_session/'+session_id)
-#         except:
-#             messages.error(request, "Failed to Update Session Year.")
-#             return redirect('/edit_session/'+session_id)
-
-
-# def delete_session(request, session_id):
-#     session = SessionYearModel.objects.get(id=session_id)
-#     try:
-#         session.delete()
-#         messages.success(request, "Session Deleted Successfully.")
-#         return redirect('manage_session')
-#     except:
-#         messages.error(request, "Failed to Delete Session.")
-#         return redirect('manage_session')
-
-
 def add_student(request):
     groups = StudentGroups.objects.all()
 
@@ -497,8 +426,34 @@ def manage_student(request):
 
 def manage_project(request):
     proposals = Proposals.objects.all()
+    supervisors = Supervisors.objects.all()
+    students = StudentGroups.objects.all()
+    students_no = StudentGroups.objects.all().count()
+
+    for supervi in supervisors:
+        groups = StudentGroups.objects.filter(supervisor = supervi.id).count()
+        groups +=1
+
+        # print (supervi.id)
+    # print(groups)
+    members = []
+    for student in students:
+        member = Students.objects.filter(group = student.id)
+
+        if member:
+            member_no = Students.objects.filter(group = student.id).count()
+            for i in range(member_no):
+                one=member[i].admin.first_name +" "+ member[i].admin.last_name 
+                members.append(one)
+            # print(one)
+        
+    print(members)
+    
     context = {
-        "proposals": proposals
+        "proposals": proposals,
+        "supervisors": supervisors,
+        "groups": groups,
+        "members": members,
     }
     return render(request, 'hod_template/manage_project_template.html', context)
 
@@ -598,8 +553,51 @@ def proposal_accept(request):
     except:
         return HttpResponse("False")
 
+@csrf_exempt
+def proposal_deny(request):
+    proposal_id = request.POST.get('id')
+    # feedback_reply = request.POST.get('reply')
+    hod = AdminHOD.objects.get()
+    try:
+        proposal = Proposals.objects.get(id=proposal_id)
+        proposal.status = "0"
+        proposal.save()
+        
+        return HttpResponse("True")
+
+    except:
+        return HttpResponse("False")
+
+@csrf_exempt
+def supervisor_assign(request):
+
+    proposal_id = request.POST.get('id1')
+    id2 = request.POST.get('id2')
+
+    supervisor_id = Supervisors.objects.get(id=id2)
+
+    print(supervisor_id, proposal_id)
+    # hod = AdminHOD.objects.get()
+    # try:
+
+    group = StudentGroups.objects.get(id=proposal_id)
+    group.supervisor = supervisor_id
+    group.save()
+    
+    return HttpResponse("True")
+
+    # except:
+    # return HttpResponse("False")
+    # INSERTING into Group Model
+    # group = StudentGroups.objects.get(admin=supervisor_id)
+    # supervisor_model.specialization = spec
+    # messages.success(request, "supervisor Updated Successfully.")
+    # return redirect('/manage_supervisor/')
+
+
 
 def admin_profile(request):
+
     user = CustomUser.objects.get(id=request.user.id)
 
     context={

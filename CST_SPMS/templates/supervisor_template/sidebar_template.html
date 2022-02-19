@@ -47,29 +47,6 @@
             </li>
 
             <li class="nav-item">
-              {% url 'supervisor_assigned_group' as supervisor_assigned_group %}
-              <a href="{{ supervisor_assigned_group }}" class="nav-link {% if request.path == supervisor_assigned_group %} active {% endif %}">
-                <i class="nav-icon fas fa-tasks"></i>
-                <p>
-                  Assigned Groups
-                </p>
-              </a>
-            </li>
-            <div class="contenedor-menu">
-              <!-- <a href="" class="btnMenu">Menu <i class="fa fa-bars"></i></a> -->
-          
-              <ul class="menu">
-                <!-- <li><a href="#">Element 1</a></li> -->
-                <li><a href="{{ supervisor_assigned_group }}" class="nav-link {% if request.path == supervisor_assigned_group %} active {% endif %}">Assigned Groups<i class="fa fa-chevron-down"></i></a>
-                  <ul>
-                    {% for group in groups %}
-                    <li><a href="{% url 'supervisor_assigned_ngroup' group.id %}">{{ group.group_name }}</a></li>
-                    {% endfor %}
-                  </ul>
-                </li>
-              </ul>
-            </div>
-            <li class="nav-item">
               {% url 'group_feedback_message' as group_feedback_message %}
               <a href="{{ group_feedback_message }}" class="nav-link {% if request.path == group_feedback_message %} active {% endif %}">
                 <i class="nav-icon fas fa-envelope-open-text"></i>

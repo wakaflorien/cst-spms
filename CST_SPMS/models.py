@@ -29,13 +29,6 @@ class AdminHOD(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
 
-class StudentGroups(models.Model):
-    id = models.AutoField(primary_key=True)
-    admin = models.OneToOneField(CustomUser, on_delete = models.CASCADE)
-    group_name = models.CharField(max_length=50)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    objects = models.Manager()
     
 class Supervisors(models.Model):
     id = models.AutoField(primary_key=True)
@@ -44,16 +37,19 @@ class Supervisors(models.Model):
     degree = models.CharField(max_length=250)
     address = models.TextField()
     gender = models.CharField(max_length=50)
-    group = models.ForeignKey(StudentGroups, on_delete=models.CASCADE, null=True)
     profile_pic = models.FileField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
 
-
-
-
-
+class StudentGroups(models.Model):
+    id = models.AutoField(primary_key=True)
+    admin = models.OneToOneField(CustomUser, on_delete = models.CASCADE)
+    group_name = models.CharField(max_length=50)
+    supervisor = models.ForeignKey(Supervisors, on_delete=models.CASCADE, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
 
 class Proposals(models.Model):
     id =models.AutoField(primary_key=True)
