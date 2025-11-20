@@ -126,7 +126,6 @@ fabric.properties
 # Distribution / packaging
 .Python
 env/
-.env
 my-project-venv/
 build/
 develop-eggs/
@@ -196,7 +195,6 @@ celerybeat-schedule
 *.sage.py
 
 # dotenv
-.env
 
 # virtualenv
 .venv
@@ -214,3 +212,8 @@ ENV/
 /site
 
 # End of https://www.gitignore.io/api/macos,linux,django,python,pycharm
+config.bat
+node_modules
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
